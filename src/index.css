@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+
+@import "tailwindcss";
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+    font-family: "IBM Plex Sans", sans-serif;
+  }
+}
+
+@theme {
+  --font-body: "IBM Plex Sans", sans-serif;
+
+  /* =========================================
+   Backgrounds & Surfaces
+   ========================================= */
+  --color-bg-app: #c8d3e6;
+  --color-bg-sidebar: #f4f5f7;
+  --color-bg-surface: #ffffff;
+
+  /* =========================================
+   Text Colors
+   ========================================= */
+
+  --color-text-primary: #111827;
+  /* Headings, primary dark text */
+  --color-text-secondary: #4b5563;
+  /* Subtitles, standard body text */
+  --color-text-muted: #9ca3af;
+  /* Inactive elements, placeholders */
+  --color-text-inverse: #ffffff;
+  /* Text on dark backgrounds */
+
+  /* =========================================
+   Borders & Tables
+   ========================================= */
+  --color-border-light: #e5e7eb;
+  /* Subtle dividers, light invoice borders */
+  --color-border-medium: #d1d5db;
+  /* Input borders, stronger dividers */
+  --color-table-header-bg: #eaecef;
+  /* Light gray background for table headers */
+  --color-table-row-hover: #f9fafb;
+  /* Very subtle gray for table row hovers */
+
+  /* =========================================
+   Buttons & Interactive Elements
+   ========================================= */
+  /* Primary Action (Dark "New Invoice" Button) */
+  --color-btn-primary-base: #333333;
+  --color-btn-primary-hover: #262626; /* ~10% perceptually darker */
+  --color-btn-primary-active: #1a1a1a; /* ~20% perceptually darker */
+  --color-btn-primary-text: #ffffff;
+
+  /* Secondary Action (Yellow "Print" Button) */
+  --color-btn-secondary-base: #cdcdcd;
+  --color-btn-secondary-hover: #bcbcbc; /* ~10% perceptually darker */
+  --color-btn-secondary-active: #b0b0b0; /* ~20% perceptually darker */
+  --color-btn-secondary-text: #4b5563;
+
+  /* Tertiary Action (Sidebar Menu Buttons) */
+  --color-btn-tertiary-base: #e2e4e8;
+  --color-btn-tertiary-hover: #cacddb;
+  /* ~10% perceptually darker */
+  --color-btn-tertiary-active: #b4b8c5;
+  /* ~20% perceptually darker */
+  --color-btn-tertiary-text: #111827;
+
+  /* =========================================
+   Semantic Colors
+   ========================================= */
+  /* Success */
+  --color-success-base: #10b981;
+  --color-success-hover: #0ea170;
+  --color-success-active: #0c8a60;
+
+  /* Danger */
+  --color-danger-base: #ef4444;
+  --color-danger-hover: #d83d3d;
+  --color-danger-active: #bc3535;
+
+  /* Warning (Harmonized with Primary Yellow) */
+  --color-warning-base: #f59e0b;
+  --color-warning-hover: #d98c0a;
+  --color-warning-active: #ba7808;
+
+  /* Info */
+  --color-info-base: #3b82f6;
+  --color-info-hover: #3271d8;
+  --color-info-active: #2b62ba;
+
+  --text-2xs: 10px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
