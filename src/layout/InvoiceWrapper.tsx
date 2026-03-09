@@ -7,6 +7,7 @@ import { getTotals } from "../utils/invoicer";
 import { LuPrinter, LuEye, LuSave } from "react-icons/lu";
 import type { Invoice } from "../hooks/useInvoice";
 import { formatDate } from "../utils/helpers";
+import PopUp from "../features/PopUp";
 
 type InvoiceWrapperProps = {
   currentInvoice: Invoice;
@@ -17,6 +18,7 @@ type InvoiceWrapperProps = {
   onPrintInvoice: () => void;
   onPrintPreview: () => void;
   onSave: () => void;
+  invoiceList: Invoice[];
 };
 
 function InvoiceWrapper({
@@ -28,6 +30,7 @@ function InvoiceWrapper({
   updateCustomerInfo,
   onPrintPreview,
   onSave,
+  invoiceList,
 }: InvoiceWrapperProps) {
   return (
     <section className="bg-bg-surface grow h-full p-8 flex flex-col gap-2 overflow-y-auto">
@@ -44,7 +47,12 @@ function InvoiceWrapper({
             {currentInvoice.id}
           </p>
         </header>
-        <BillTo customer={currentInvoice.customer} updateCustomerInfo={updateCustomerInfo} />
+        <BillTo
+          currentInvoice={currentInvoice}
+          invoiceList={invoiceList}
+          customer={currentInvoice.customer}
+          updateCustomerInfo={updateCustomerInfo}
+        />
         <Divider className="my-4" />
         {/* Items */}
         <section>

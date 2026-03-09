@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Print from "./features/PrintableInvoice/PrintableInvoice";
 import useInvoice from "./hooks/useInvoice";
 import InvoiceWrapper from "./layout/InvoiceWrapper";
@@ -8,9 +8,8 @@ function App() {
   const [showPreview, setShowPreview] = useState(false);
   const { currentInvoice, createNewInvoice, setCurrentInvoice, findInvoice, getAllInvoices, ...rest } = useInvoice();
 
-  function generateInvoice() {
-    console.log(currentInvoice);
-    return;
+  function printInvoice() {
+    window.print();
   }
 
   function handleSelectInvoice(id: string) {
@@ -22,15 +21,16 @@ function App() {
   }
 
   return (
-    <main className="h-full font-body py-8 bg-bg-app flex justify-center gap-2">
-      <div className="h-full flex w-255 rounded-lg overflow-hidden">
+    <main className="h-full font-body flex justify-center gap-2">
+      <div className="h-full flex w-full overflow-hidden">
         <SideBar
           onCreateNewInvoice={createNewInvoice}
           invoiceList={getAllInvoices()}
           onSelectInvoice={handleSelectInvoice}
         />
         <InvoiceWrapper
-          onPrintInvoice={generateInvoice}
+          invoiceList={getAllInvoices()}
+          onPrintInvoice={printInvoice}
           currentInvoice={currentInvoice}
           updateInvoiceItems={rest.updateInvoiceItems}
           updateCustomerInfo={rest.updateCustomerInfo}

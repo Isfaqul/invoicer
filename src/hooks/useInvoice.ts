@@ -62,11 +62,8 @@ export default function useInvoice() {
   }
 
   function updateCustomerInfo(field: string, value: string) {
-    console.log(`${field} : ${value}`);
-    const customerCopy = { ...currentInvoice.customer, [field]: value };
-
     setCurrentInvoice((prev) => {
-      return { ...prev, customer: customerCopy };
+      return { ...prev, customer: { ...prev.customer, [field]: value } };
     });
   }
 
