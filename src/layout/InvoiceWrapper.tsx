@@ -71,12 +71,7 @@ function InvoiceWrapper({
               <GrAdd /> Add Item
             </Button>
             <div className="flex gap-2">
-              <Button
-                onClick={onSave}
-                variant="primary"
-                type="button"
-                className="bg-red-800 hover:bg-red-900 active:bg-red-950"
-              >
+              <Button onClick={onSave} variant="primary" type="button" className="">
                 <LuSave /> Save
               </Button>
               <Button onClick={() => onPrintPreview()} variant="secondary" type="button">

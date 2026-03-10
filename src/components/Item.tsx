@@ -36,7 +36,11 @@ function Item({ item, onDelete, updateInvoiceItems }: ItemProps) {
       onMouseLeave={() => setShowDelete(false)}
     >
       {showDelete && (
-        <Button className="bg-red-400 absolute -top-2 -right-2" variant="icon" onClick={() => onDelete(item.id)}>
+        <Button
+          className="bg-red-400 absolute -top-2 -right-2 transition-all ease-out hover:bg-red-500 active:bg-red-600"
+          variant="icon"
+          onClick={() => onDelete(item.id)}
+        >
           <BiTrash className="text-white text-xs" />
         </Button>
       )}

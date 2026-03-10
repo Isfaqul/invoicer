@@ -17,7 +17,7 @@ function PrintableInvoice({ currentInvoice }: PrintProps) {
   const amountInWords = RUPEES_IN_WORDS(total);
 
   return (
-    <div id="print-area">
+    <div id="print-area" className="p-2">
       <section className="h-full border bg-white p-4 rounded-md border-border-medium w-2xl print:w-[210mm] print:min-h-[297mm] print:border-0 print:p-0">
         {/* Invoice Header */}
         <div className="flex justify-between">
@@ -88,11 +88,11 @@ function PrintableInvoice({ currentInvoice }: PrintProps) {
             </p>
           </div>
           {/* <div className="flex items-center justify-between w-full mt-2">
-              <p className="text-xl font-semibold">Due </p>
-              <h2 className="text-xl font-semibold text-right">
-                <span className="text-gray-400 text-sm">₹</span> 3000.00
-              </h2>
-            </div> */}
+            <p className="text-xl font-semibold">Due </p>
+            <h2 className="text-xl font-semibold text-right">
+              <span className="text-gray-400 text-sm">₹</span> 3000.00
+            </h2>
+          </div> */}
         </div>
         {/* Items Table */}
         <table className="table-auto border-collapse mt-3 text-xs w-full">
@@ -186,6 +186,10 @@ function PrintableInvoice({ currentInvoice }: PrintProps) {
         <div className="text-xs mt-3">
           <h4 className="font-semibold">Declaration:</h4>
           <p className="text-xs">Composition taxable person, not eligible to collect tax on supplies</p>
+        </div>
+        {/* Signature Section */}
+        <div className="h-16 flex justify-end items-end">
+          <p className="text-text-primary font-semibold text-xs print:text-sm text-right">Signature</p>
         </div>
       </section>
     </div>

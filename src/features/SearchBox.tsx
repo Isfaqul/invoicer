@@ -1,6 +1,7 @@
+import type { ChangeEvent } from "react";
 import { LuSearch } from "react-icons/lu";
 
-function SearchBox() {
+function SearchBox({ query, onChange }: { query: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void }) {
   return (
     <form action="#" noValidate>
       <label htmlFor="search">
@@ -11,6 +12,8 @@ function SearchBox() {
             id="search"
             name="search"
             placeholder="Search"
+            value={query}
+            onChange={onChange}
           />
           <LuSearch className="block text-lg shrink-0" />
         </div>
