@@ -1,4 +1,4 @@
-import { LuFilePlus2, LuLayoutDashboard, LuFish, LuEllipsisVertical, LuTrash, LuTrash2 } from "react-icons/lu";
+import { LuFilePlus2, LuLayoutDashboard, LuFish, LuEllipsisVertical, LuTrash2 } from "react-icons/lu";
 import Button from "../components/Button";
 import Divider from "../components/Divider";
 import SearchBox from "../features/SearchBox";
@@ -114,18 +114,6 @@ function InvoiceListItem({
       )}
     </li>
   );
-}
-
-{
-  /* <li
-  onClick={() => {
-    onSelectInvoice(invoice.id);
-  }}
-  className="text-center bg-bg-sidebar py-1 px-2 cursor-pointer transition-colors ease-out rounded-sm hover:bg-gray-200 active:bg-gray-300"
-  key={invoice.id}
->
-  {invoice.id}
-</li>; */
 }
 
 export default SideBar;

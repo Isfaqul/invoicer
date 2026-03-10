@@ -83,7 +83,7 @@ function ComboboxList({ items, activeIndex, onSelect }: ComboboxListProps) {
       {items.map((item, index) => (
         <li key={index}>
           <button
-            onMouseDown={(e) => {
+            onMouseDown={() => {
               console.log("Click Working");
               onSelect(items[index]);
             }}
