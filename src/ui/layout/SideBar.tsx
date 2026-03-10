@@ -1,18 +1,26 @@
-import { LuFilePlus2, LuLayoutDashboard, LuFish, LuEllipsisVertical, LuTrash2 } from "react-icons/lu";
+import { LuFilePlus2, LuLayoutDashboard, LuFish, LuEllipsisVertical } from "react-icons/lu";
 import Button from "../components/Button";
 import Divider from "../components/Divider";
 import SearchBox from "../features/SearchBox";
 import type { Invoice } from "../hooks/useInvoice";
 import { useState, type ReactNode } from "react";
+import { BiTrash } from "react-icons/bi";
 
 type SideBarProps = {
   onCreateNewInvoice: () => void;
   invoiceList: Invoice[];
   onSelectInvoice: (id: string) => void;
   onDeleteInvoice: (id: string) => void;
+  currentInvoiceId: string;
 };
 
-function SideBar({ onCreateNewInvoice, invoiceList, onSelectInvoice, onDeleteInvoice }: SideBarProps) {
+function SideBar({
+  onCreateNewInvoice,
+  invoiceList,
+  onSelectInvoice,
+  onDeleteInvoice,
+  currentInvoiceId,
+}: SideBarProps) {
   const [query, setQuery] = useState("");
 
   function filterInvoices(queryStr: string): Invoice[] {
@@ -40,12 +48,13 @@ function SideBar({ onCreateNewInvoice, invoiceList, onSelectInvoice, onDeleteInv
         <h1 className="text-xl text-text-primary uppercase font-bold tracking-wide">Adarsha Printers</h1>
         <p className="text-xs font-light tracking-wide text-text-secondary">Guwahati Club, Guwahati - 781003</p>
       </hgroup>
+      <Divider className="border-border-medium" />
       <SearchBox onChange={(e) => setQuery(e.target.value)} query={query} />
       <Button onClick={onCreateNewInvoice} variant="primary" type="button" className="text-sm">
         <LuFilePlus2 /> New Invoice
       </Button>
 
-      <Divider className="border-border-medium" />
+      {/* <Divider className="border-border-medium" /> */}
       <Button variant="secondary" type="button" className="text-sm">
         <LuLayoutDashboard /> Dashboard
       </Button>
@@ -55,12 +64,15 @@ function SideBar({ onCreateNewInvoice, invoiceList, onSelectInvoice, onDeleteInv
       <Divider className="border-border-medium" />
       <div>
         <h2 className="font-medium mb-2">{query ? "Search Results" : "All Invoices"} </h2>
-        <ul className="bg-bg-surface rounded-md p-3 border border-border-light space-y-2 overflow-y-auto">
+        <ul className="bg-bg-surface rounded-xs p-3 border border-border-light space-y-2 overflow-y-auto">
           {!filteredInvoice.length && (
-            <p className="border border-dashed border-border-medium text-center py-1 text-gray-400 rounded-sm">Empty</p>
+            <p className="border border-dashed border-border-medium text-center py-1 text-gray-400 rounded-2xs">
+              Empty
+            </p>
           )}
           {filteredInvoice.map((invoice) => (
             <InvoiceListItem
+              active={currentInvoiceId === invoice.id}
               key={invoice.id}
               onClick={() => onSelectInvoice(invoice.id)}
               onDelete={() => onDeleteInvoice(invoice.id)}
@@ -78,10 +90,12 @@ function InvoiceListItem({
   onClick,
   children,
   onDelete,
+  active,
 }: {
   children: ReactNode;
   onClick: () => void;
   onDelete: () => void;
+  active: boolean;
 }) {
   const [showOptions, setShowOptions] = useState(false);
 
@@ -89,7 +103,7 @@ function InvoiceListItem({
     <li className="flex relative">
       <button
         onClick={onClick}
-        className="block w-full text-center bg-bg-sidebar py-1 px-2 cursor-pointer transition-colors ease-out rounded-sm hover:bg-gray-200 active:bg-gray-300"
+        className={`block w-full text-center ${active && "border-l-5 border-gray-700"} bg-bg-sidebar py-1 px-2 cursor-pointer transition-colors ease-out rounded-2xs hover:bg-gray-200 active:bg-gray-300`}
         type="button"
       >
         {children}
@@ -100,16 +114,16 @@ function InvoiceListItem({
         type="button"
         className="cursor-pointer transition ml-2 ease-in hover:text-gray-500"
       >
-        <LuEllipsisVertical />
+        <LuEllipsisVertical className="pointer-events-none" />
       </button>
       {/* Options */}
       {showOptions && (
         <button
           onClick={onDelete}
           type="button"
-          className="bg-red-400 text-white px-2 py-2 absolute right-6 top-0 rounded-md cursor-pointer transition-all ease-out hover:bg-red-500 active:bg-red-600"
+          className="bg-red-400 text-white px-2.5 py-2.5 absolute right-6 rounded-2xs cursor-pointer transition-all ease-out hover:bg-red-500 active:bg-red-600"
         >
-          <LuTrash2 />
+          <BiTrash className="text-white text-xs" />
         </button>
       )}
     </li>

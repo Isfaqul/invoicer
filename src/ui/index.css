@@ -92,6 +92,33 @@
   --color-info-active: #2b62ba;
 
   --text-2xs: 10px;
+
+  /* Rounded */
+
+  --radius-2xs: 1px;
+
+  --animate-slide-in: slideIn ease-out 150ms;
+  --animate-slide-out: slideOut ease-out 150ms;
+
+  @keyframes slideIn {
+    0% {
+      transform: translateX(100%);
+    }
+    ,
+    100% {
+      tranform: translateY(initial);
+    }
+  }
+
+  @keyframes slideOut {
+    0% {
+      transform: translateX(inital);
+    }
+    ,
+    100% {
+      tranform: translateY(100%);
+    }
+  }
 }
 
 @media print {

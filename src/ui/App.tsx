@@ -26,13 +26,14 @@ function App() {
   }
 
   return (
-    <main className="h-full font-body flex justify-center gap-2">
+    <main className="h-full font-body flex justify-center gap-2 relative overflow-x-hidden">
       <div className="h-full flex w-full overflow-hidden">
         <SideBar
           onCreateNewInvoice={createNewInvoice}
           invoiceList={invoiceList}
           onSelectInvoice={handleSelectInvoice}
           onDeleteInvoice={handleDeleteInvoice}
+          currentInvoiceId={currentInvoice.id}
         />
         <InvoiceWrapper
           invoiceList={invoiceList}
@@ -46,7 +47,9 @@ function App() {
           onSave={rest.saveInvoice}
         />
       </div>
-      {showPreview && <Print currentInvoice={currentInvoice} />}
+      {showPreview && (
+        <Print onPreviewClose={() => setShowPreview(false)} onPrint={printInvoice} currentInvoice={currentInvoice} />
+      )}
     </main>
   );
 }

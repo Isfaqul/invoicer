@@ -79,7 +79,7 @@ type ComboboxListProps = {
 
 function ComboboxList({ items, activeIndex, onSelect }: ComboboxListProps) {
   return (
-    <ul className="absolute w-full block bg-white rounded-sm border border-border-light placeholder:text-gray-400/80">
+    <ul className="absolute w-full block bg-white rounded-2xs border top-[110%] border-gray-700 placeholder:text-gray-400/80">
       {items.map((item, index) => (
         <li key={index}>
           <button

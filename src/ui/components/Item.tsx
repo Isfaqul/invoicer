@@ -31,30 +31,31 @@ function Item({ item, onDelete, updateInvoiceItems }: ItemProps) {
 
   return (
     <section
-      className="border border-transparent bg-bg-sidebar p-4 justify-between rounded-md relative focus-within:border-border-medium focus-within:border"
+      className="border border-transparent bg-bg-sidebar p-4 justify-between rounded-xs relative focus-within:border-border-medium focus-within:border"
       onMouseEnter={() => setShowDelete(true)}
       onMouseLeave={() => setShowDelete(false)}
     >
-      {showDelete && (
-        <Button
-          className="bg-red-400 absolute -top-2 -right-2 transition-all ease-out hover:bg-red-500 active:bg-red-600"
-          variant="icon"
-          onClick={() => onDelete(item.id)}
-        >
-          <BiTrash className="text-white text-xs" />
-        </Button>
-      )}
-
       <div className="flex items-center mb-2 gap-2">
         <label htmlFor={`itemName${item.id}`}>Item</label>
-        <Input
-          onChange={handleChange}
-          value={item.name}
-          type="text"
-          id={`itemName${item.id}`}
-          name="name"
-          placeholder="Enter item name"
-        />
+        <div className="w-full flex items-center gap-2">
+          <Input
+            onChange={handleChange}
+            value={item.name}
+            type="text"
+            id={`itemName${item.id}`}
+            name="name"
+            placeholder="Enter item name"
+          />
+          {showDelete && (
+            <Button
+              className="bg-red-400 transition-all ease-out hover:bg-red-500 active:bg-red-600"
+              variant="icon"
+              onClick={() => onDelete(item.id)}
+            >
+              <BiTrash className="text-white text-xs" />
+            </Button>
+          )}
+        </div>
       </div>
       <div className="item-metrics flex gap-5 items-center">
         <div className="flex items-center gap-2.5 flex-1">

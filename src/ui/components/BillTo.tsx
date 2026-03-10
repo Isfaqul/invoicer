@@ -36,7 +36,7 @@ function BillTo({ customer, updateCustomerInfo, invoiceList }: BillToProps) {
     .map((invoice) => invoice.customer);
 
   return (
-    <section className="bill-to-section p-4 bg-bg-sidebar rounded-md">
+    <section className="bill-to-section p-4 bg-bg-sidebar rounded-xs">
       <h2 className="font-bold text-md">Bill To</h2>
 
       <Divider className="border-border-medium mt-2 mb-4" />
