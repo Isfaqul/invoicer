@@ -16,6 +16,16 @@ class Storage {
     localStorage.setItem(this.INVOICE_LIST_KEY, JSON.stringify(invoiceList));
   }
 
+  deleteInvoice(id: string) {
+    let invoiceList: Invoice[] = this.loadInvoiceList();
+    const invoiceExist = invoiceList.findIndex((i) => i.id === id);
+    if (invoiceExist < 0) return;
+
+    invoiceList = invoiceList.filter((i) => i.id !== id);
+
+    localStorage.setItem(this.INVOICE_LIST_KEY, JSON.stringify(invoiceList));
+  }
+
   loadInvoiceList(): Invoice[] {
     const invoiceList = JSON.parse(localStorage.getItem(this.INVOICE_LIST_KEY) || "[]") as Invoice[];
     return invoiceList;
@@ -35,8 +45,6 @@ class Storage {
   loadLastInvoice() {
     const invoiceList = this.loadInvoiceList();
     if (!invoiceList.length) return null;
-
-    console.log(invoiceList);
 
     return invoiceList[invoiceList.length - 1];
   }

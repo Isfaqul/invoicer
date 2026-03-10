@@ -7,7 +7,6 @@ import { getTotals } from "../utils/invoicer";
 import { LuPrinter, LuEye, LuSave } from "react-icons/lu";
 import type { Invoice } from "../hooks/useInvoice";
 import { formatDate } from "../utils/helpers";
-import PopUp from "../features/PopUp";
 
 type InvoiceWrapperProps = {
   currentInvoice: Invoice;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Print from "./features/PrintableInvoice/PrintableInvoice";
 import useInvoice from "./hooks/useInvoice";
 import InvoiceWrapper from "./layout/InvoiceWrapper";
@@ -6,7 +6,8 @@ import SideBar from "./layout/SideBar";
 
 function App() {
   const [showPreview, setShowPreview] = useState(false);
-  const { currentInvoice, createNewInvoice, setCurrentInvoice, findInvoice, getAllInvoices, ...rest } = useInvoice();
+  const { currentInvoice, createNewInvoice, setCurrentInvoice, findInvoice, deleteInvoice, invoiceList, ...rest } =
+    useInvoice();
 
   function printInvoice() {
     window.print();
@@ -20,16 +21,21 @@ function App() {
     setCurrentInvoice(invoice);
   }
 
+  function handleDeleteInvoice(id: string) {
+    deleteInvoice(id);
+  }
+
   return (
     <main className="h-full font-body flex justify-center gap-2">
       <div className="h-full flex w-full overflow-hidden">
         <SideBar
           onCreateNewInvoice={createNewInvoice}
-          invoiceList={getAllInvoices()}
+          invoiceList={invoiceList}
           onSelectInvoice={handleSelectInvoice}
+          onDeleteInvoice={handleDeleteInvoice}
         />
         <InvoiceWrapper
-          invoiceList={getAllInvoices()}
+          invoiceList={invoiceList}
           onPrintInvoice={printInvoice}
           currentInvoice={currentInvoice}
           updateInvoiceItems={rest.updateInvoiceItems}

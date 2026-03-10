@@ -19,6 +19,7 @@ export type Customer = {
 
 export default function useInvoice() {
   const [currentInvoice, setCurrentInvoice] = useState<Invoice>(createBlankInvoiceTemplate());
+  const [invoiceList, setInvoiceList] = useState<Invoice[]>(getAllInvoices());
 
   function createNewInvoice() {
     const newInvoice = createBlankInvoiceTemplate();
@@ -85,6 +86,12 @@ export default function useInvoice() {
 
   function saveInvoice() {
     storage.saveInvoice(currentInvoice);
+
+    setInvoiceList((prev) => {
+      const index = prev.findIndex((i) => i.id === currentInvoice.id);
+      if (index < 0) return [...prev, currentInvoice];
+      return prev;
+    });
   }
 
   function findInvoice(id: string) {
@@ -93,6 +100,12 @@ export default function useInvoice() {
 
   function getAllInvoices() {
     return storage.loadInvoiceList();
+  }
+
+  function deleteInvoice(id: string) {
+    setInvoiceList((prev) => prev.filter((i) => i.id !== id));
+
+    storage.deleteInvoice(id);
   }
 
   return {
@@ -104,7 +117,9 @@ export default function useInvoice() {
     createNewInvoice,
     saveInvoice,
     findInvoice,
-    getAllInvoices,
     setCurrentInvoice,
+    deleteInvoice,
+    invoiceList,
+    setInvoiceList,
   };
 }
