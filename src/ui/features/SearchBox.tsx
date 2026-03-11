@@ -1,13 +1,26 @@
 import type { ChangeEvent } from "react";
 import { LuSearch } from "react-icons/lu";
 
-function SearchBox({ query, onChange }: { query: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void }) {
+function SearchBox({
+  query,
+  onChange,
+  collapsed,
+  onSearchBarClick,
+}: {
+  query: string;
+  collapsed: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSearchBarClick: (e: React.MouseEvent) => void;
+}) {
   return (
     <form action="#" noValidate>
       <label htmlFor="search">
-        <div className="flex gap-1 items-center justify-between bg-white px-3 py-2 rounded-2xs border border-border-medium transition-all ease-out hover:border-gray-700 outline-border-light focus-within:outline-2 focus-within:border-gray-700">
+        <div
+          onClick={onSearchBarClick}
+          className={`flex gap-1 items-center justify-between bg-white ${collapsed ? "px-1" : "px-3"} py-1.75 rounded-2xs border border-border-medium transition-all ease-out hover:border-gray-700 outline-border-light focus-within:outline-2 focus-within:border-gray-700`}
+        >
           <input
-            className="block w-full outline-0 font-body flex-1 text-sm"
+            className={`block outline-0 font-body text-sm ${collapsed ? "w-0" : "w-full"}`}
             type="text"
             id="search"
             name="search"
@@ -15,7 +28,7 @@ function SearchBox({ query, onChange }: { query: string; onChange: (e: ChangeEve
             value={query}
             onChange={onChange}
           />
-          <LuSearch className="block text-lg shrink-0" />
+          <LuSearch className={`block text-lg shrink-0 relative ${collapsed && "-translate-x-0.5"}`} />
         </div>
       </label>
     </form>

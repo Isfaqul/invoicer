@@ -1,10 +1,18 @@
-import { LuFilePlus2, LuLayoutDashboard, LuFish, LuEllipsisVertical } from "react-icons/lu";
+import {
+  LuFilePlus2,
+  LuLayoutDashboard,
+  LuFish,
+  LuEllipsisVertical,
+  LuPanelLeftOpen,
+  LuPanelLeftClose,
+} from "react-icons/lu";
 import Button from "../components/Button";
 import Divider from "../components/Divider";
 import SearchBox from "../features/SearchBox";
 import type { Invoice } from "../hooks/useInvoice";
 import { useState, type ReactNode } from "react";
 import { BiTrash } from "react-icons/bi";
+import logo from "../assets/logo.svg";
 
 type SideBarProps = {
   onCreateNewInvoice: () => void;
@@ -22,6 +30,7 @@ function SideBar({
   currentInvoiceId,
 }: SideBarProps) {
   const [query, setQuery] = useState("");
+  const [collapsed, setCollapsed] = useState(true);
 
   function filterInvoices(queryStr: string): Invoice[] {
     queryStr = queryStr.toLowerCase();
@@ -43,45 +52,73 @@ function SideBar({
   let filteredInvoice = filterInvoices(query);
 
   return (
-    <aside className="bg-bg-sidebar w-72 h-full shrink-0 p-8 flex flex-col gap-6">
-      <hgroup className="mt">
-        <h1 className="text-xl text-text-primary uppercase font-bold tracking-wide">Adarsha Printers</h1>
-        <p className="text-xs font-light tracking-wide text-text-secondary">Guwahati Club, Guwahati - 781003</p>
+    <aside
+      className={`h-full bg-bg-sidebar shrink-0 flex flex-col transition-all 400ms ease-glide gap-6 py-8 relative ${collapsed ? "w-16 px-4" : "w-72 px-8"}`}
+    >
+      {/* SideBar Toggle Button */}
+      <button
+        onClick={() => setCollapsed((prev) => !prev)}
+        type="button"
+        className="absolute -right-7 top-0 z-10 text-xl bg-bg-sidebar text-text-muted px-1 py-1 cursor-pointer rounded-2xs transition ease-out hover:text-text-primary"
+      >
+        {collapsed ? <LuPanelLeftOpen /> : <LuPanelLeftClose />}
+      </button>
+
+      <hgroup className="h-10">
+        {collapsed ? (
+          <img src={logo} className="block w-8" />
+        ) : (
+          <>
+            <h1 className="text-xl text-text-primary uppercase font-bold tracking-wide">Adarsha Printers</h1>
+            <p className="text-xs font-light tracking-wide text-text-secondary">Guwahati Club, Guwahati - 781003</p>
+          </>
+        )}
       </hgroup>
+
+      {/*  */}
       <Divider className="border-border-medium" />
-      <SearchBox onChange={(e) => setQuery(e.target.value)} query={query} />
+      <SearchBox
+        onSearchBarClick={() => collapsed && setCollapsed(false)}
+        onChange={(e) => setQuery(e.target.value)}
+        query={query}
+        collapsed={collapsed}
+      />
       <Button onClick={onCreateNewInvoice} variant="primary" type="button" className="text-sm">
-        <LuFilePlus2 /> New Invoice
+        <LuFilePlus2 className={`shrink-0 ${collapsed && "text-xl"}`} /> {!collapsed && "New Invoice"}
       </Button>
 
       {/* <Divider className="border-border-medium" /> */}
       <Button variant="secondary" type="button" className="text-sm">
-        <LuLayoutDashboard /> Dashboard
+        <LuLayoutDashboard className={`shrink-0 ${collapsed && "text-xl"}`} /> {!collapsed && "Dashboard"}
       </Button>
       <Button variant="secondary" type="button" className="text-sm">
-        <LuFish /> Clients
+        <LuFish className={`shrink-0 ${collapsed && "text-xl"}`} /> {!collapsed && "Clients"}
       </Button>
       <Divider className="border-border-medium" />
-      <div>
-        <h2 className="font-medium mb-2">{query ? "Search Results" : "All Invoices"} </h2>
-        <ul className="bg-bg-surface rounded-xs p-3 border border-border-light space-y-2 overflow-y-auto">
-          {!filteredInvoice.length && (
-            <p className="border border-dashed border-border-medium text-center py-1 text-gray-400 rounded-2xs">
-              Empty
-            </p>
-          )}
-          {filteredInvoice.map((invoice) => (
-            <InvoiceListItem
-              active={currentInvoiceId === invoice.id}
-              key={invoice.id}
-              onClick={() => onSelectInvoice(invoice.id)}
-              onDelete={() => onDeleteInvoice(invoice.id)}
-            >
-              {invoice.id}
-            </InvoiceListItem>
-          ))}
-        </ul>
-      </div>
+
+      {/* Invoice List */}
+      {!collapsed && (
+        <div>
+          <h2 className="font-medium mb-2">{query ? "Search Results" : "All Invoices"} </h2>
+          <ul className="bg-bg-surface rounded-xs p-3 border border-border-light space-y-2 overflow-y-auto">
+            {!filteredInvoice.length && (
+              <p className="border border-dashed border-border-medium text-center py-1 text-gray-400 rounded-2xs">
+                Empty
+              </p>
+            )}
+            {filteredInvoice.map((invoice) => (
+              <InvoiceListItem
+                active={currentInvoiceId === invoice.id}
+                key={invoice.id}
+                onClick={() => onSelectInvoice(invoice.id)}
+                onDelete={() => onDeleteInvoice(invoice.id)}
+              >
+                {invoice.id}
+              </InvoiceListItem>
+            ))}
+          </ul>
+        </div>
+      )}
     </aside>
   );
 }
