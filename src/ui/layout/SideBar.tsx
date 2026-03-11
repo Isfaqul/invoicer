@@ -4,7 +4,6 @@ import {
   LuEllipsisVertical,
   LuPanelLeftOpen,
   LuPanelLeftClose,
-  LuUsers,
   LuFileText,
 } from "react-icons/lu";
 import Button from "../components/Button";

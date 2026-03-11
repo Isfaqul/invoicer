@@ -88,7 +88,7 @@ function ComboboxList({ items, activeIndex, onSelect }: ComboboxListProps) {
               onSelect(items[index]);
             }}
             type="button"
-            className={`block w-full px-2 py-1 text-left cursor-pointer transition ease-out duration-200 hover:bg-gray-300 active:bg-gray-400 ${activeIndex === index && "bg-gray-300"}`}
+            className={`block w-full px-1.5 py-0.5 text-left cursor-pointer transition ease-out duration-200 hover:bg-gray-300 active:bg-gray-400 ${activeIndex === index && "bg-gray-300"}`}
           >
             {item.clientName}
           </button>

@@ -17,7 +17,7 @@ function SearchBox({
       <label htmlFor="search">
         <div
           onClick={onSearchBarClick}
-          className={`flex gap-1 items-center justify-between bg-white ${collapsed ? "px-1" : "px-3"} py-1.75 rounded-2xs border border-border-medium transition-all ease-out hover:border-gray-700 outline-border-light focus-within:outline-2 focus-within:border-gray-700`}
+          className={`flex gap-1 items-center justify-between bg-white ${collapsed ? "px-1" : "px-2"} py-1.75 rounded-2xs border border-border-medium transition-all ease-out hover:border-gray-700 outline-border-light focus-within:outline-2 focus-within:border-gray-700`}
         >
           <input
             className={`block outline-0 font-body text-sm ${collapsed ? "w-0" : "w-full"}`}
