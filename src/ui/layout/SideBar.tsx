@@ -1,10 +1,11 @@
 import {
   LuFilePlus2,
   LuLayoutDashboard,
-  LuFish,
   LuEllipsisVertical,
   LuPanelLeftOpen,
   LuPanelLeftClose,
+  LuUsers,
+  LuFileText,
 } from "react-icons/lu";
 import Button from "../components/Button";
 import Divider from "../components/Divider";
@@ -13,6 +14,7 @@ import type { Invoice } from "../hooks/useInvoice";
 import { useState, type ReactNode } from "react";
 import { BiTrash } from "react-icons/bi";
 import logo from "../assets/logo.svg";
+import type { Views } from "../hooks/useView";
 
 type SideBarProps = {
   onCreateNewInvoice: () => void;
@@ -20,6 +22,8 @@ type SideBarProps = {
   onSelectInvoice: (id: string) => void;
   onDeleteInvoice: (id: string) => void;
   currentInvoiceId: string;
+  setView: (view: Views) => void;
+  currentView: Views;
 };
 
 function SideBar({
@@ -28,6 +32,8 @@ function SideBar({
   onSelectInvoice,
   onDeleteInvoice,
   currentInvoiceId,
+  setView,
+  currentView,
 }: SideBarProps) {
   const [query, setQuery] = useState("");
   const [collapsed, setCollapsed] = useState(true);
@@ -47,6 +53,15 @@ function SideBar({
 
       return idMatch || customerNameMatch || addressMatch || itemMatch;
     });
+  }
+
+  function handleView(e: React.MouseEvent) {
+    const target = e.target as HTMLElement;
+    const view = target.getAttribute("data-view-btn") as Views;
+
+    if (!view) return;
+
+    setView(view);
   }
 
   let filteredInvoice = filterInvoices(query);
@@ -77,27 +92,64 @@ function SideBar({
 
       {/*  */}
       <Divider className="border-border-medium" />
-      <SearchBox
-        onSearchBarClick={() => collapsed && setCollapsed(false)}
-        onChange={(e) => setQuery(e.target.value)}
-        query={query}
-        collapsed={collapsed}
-      />
-      <Button onClick={onCreateNewInvoice} variant="primary" type="button" className="text-sm">
-        <LuFilePlus2 className={`shrink-0 ${collapsed && "text-xl"}`} /> {!collapsed && "New Invoice"}
-      </Button>
+      <div className="flex flex-col gap-3">
+        <SearchBox
+          onSearchBarClick={() => collapsed && setCollapsed(false)}
+          onChange={(e) => setQuery(e.target.value)}
+          query={query}
+          collapsed={collapsed}
+        />
+        {currentView === "Invoice" && (
+          <Button
+            onClick={onCreateNewInvoice}
+            variant="primary"
+            type="button"
+            className={`text-sm h-9 relative ${collapsed && "justify-center"}`}
+          >
+            <LuFilePlus2 className={`pointer-events-none shrink-0 text-base ${collapsed && "text-lg"}`} />{" "}
+            {!collapsed && "New Invoice"}
+          </Button>
+        )}
 
-      {/* <Divider className="border-border-medium" /> */}
-      <Button variant="secondary" type="button" className="text-sm">
-        <LuLayoutDashboard className={`shrink-0 ${collapsed && "text-xl"}`} /> {!collapsed && "Dashboard"}
-      </Button>
-      <Button variant="secondary" type="button" className="text-sm">
-        <LuFish className={`shrink-0 ${collapsed && "text-xl"}`} /> {!collapsed && "Clients"}
-      </Button>
+        {currentView !== "Invoice" && (
+          <Button
+            data-view-btn="Invoice"
+            onClick={handleView}
+            variant="secondary"
+            type="button"
+            className={`text-sm h-9 relative ${collapsed && "justify-center"}`}
+          >
+            <LuFileText className={`pointer-events-none shrink-0 text-base ${collapsed && "text-lg"}`} />{" "}
+            {!collapsed && "Invoice"}
+          </Button>
+        )}
+
+        {/* <Divider className="border-border-medium" /> */}
+        <Button
+          data-view-btn="Dashboard"
+          onClick={handleView}
+          variant="secondary"
+          type="button"
+          className={`text-sm h-9 relative ${collapsed && "justify-center"}`}
+        >
+          <LuLayoutDashboard className={`pointer-events-none shrink-0 text-base ${collapsed && "text-lg"}`} />{" "}
+          {!collapsed && "Dashboard"}
+        </Button>
+        {/* <Button
+          data-view-btn="Clients"
+          onClick={handleView}
+          variant="secondary"
+          type="button"
+          className={`text-sm h-9 relative ${collapsed && "justify-center"} `}
+        >
+          <LuUsers className={`pointer-events-none shrink-0 text-base ${collapsed && "text-lg"}`} />{" "}
+          {!collapsed && "Clients"}
+        </Button> */}
+      </div>
       <Divider className="border-border-medium" />
 
       {/* Invoice List */}
-      {!collapsed && (
+      {!collapsed && currentView === "Invoice" && (
         <div>
           <h2 className="font-medium mb-2">{query ? "Search Results" : "All Invoices"} </h2>
           <ul className="bg-bg-surface rounded-xs p-3 border border-border-light space-y-2 overflow-y-auto">

@@ -3,11 +3,14 @@ import Print from "./features/PrintableInvoice/PrintableInvoice";
 import useInvoice from "./hooks/useInvoice";
 import InvoiceWrapper from "./layout/InvoiceWrapper";
 import SideBar from "./layout/SideBar";
+import Dashboard from "./features/Dashboard/Dashboard";
+import useView from "./hooks/useView";
 
 function App() {
   const [showPreview, setShowPreview] = useState(false);
   const { currentInvoice, createNewInvoice, setCurrentInvoice, findInvoice, deleteInvoice, invoiceList, ...rest } =
     useInvoice();
+  const { currentView, setCurrentView } = useView();
 
   function printInvoice() {
     window.print();
@@ -34,18 +37,24 @@ function App() {
           onSelectInvoice={handleSelectInvoice}
           onDeleteInvoice={handleDeleteInvoice}
           currentInvoiceId={currentInvoice.id}
+          setView={setCurrentView}
+          currentView={currentView}
         />
-        <InvoiceWrapper
-          invoiceList={invoiceList}
-          onPrintInvoice={printInvoice}
-          currentInvoice={currentInvoice}
-          updateInvoiceItems={rest.updateInvoiceItems}
-          updateCustomerInfo={rest.updateCustomerInfo}
-          addItemRow={rest.addItemRow}
-          deleteItemRow={rest.deleteItemRow}
-          onPrintPreview={() => setShowPreview(!showPreview)}
-          onSave={rest.saveInvoice}
-        />
+        {currentView === "Invoice" ? (
+          <InvoiceWrapper
+            invoiceList={invoiceList}
+            onPrintInvoice={printInvoice}
+            currentInvoice={currentInvoice}
+            updateInvoiceItems={rest.updateInvoiceItems}
+            updateCustomerInfo={rest.updateCustomerInfo}
+            addItemRow={rest.addItemRow}
+            deleteItemRow={rest.deleteItemRow}
+            onPrintPreview={() => setShowPreview(!showPreview)}
+            onSave={rest.saveInvoice}
+          />
+        ) : (
+          <Dashboard />
+        )}
       </div>
       {showPreview && (
         <Print onPreviewClose={() => setShowPreview(false)} onPrint={printInvoice} currentInvoice={currentInvoice} />

@@ -23,7 +23,7 @@ function PrintableInvoice({ currentInvoice, onPreviewClose, onPrint }: PrintProp
     <>
       <div
         id="print-area"
-        className="bg-white p-2 print:p-0 fixed inset-y-0 right-0 z-40 flex items-start gap-2 shadow-lg animate-slide-in"
+        className="bg-bg-sidebar p-2 print:p-0 fixed inset-y-0 right-0 z-40 flex items-start gap-2 animate-slide-in"
       >
         <div className="flex flex-col gap-2 print:hidden">
           <button

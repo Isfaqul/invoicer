@@ -76,14 +76,14 @@ function InvoiceWrapper({
               <Button onClick={() => onPrintPreview()} variant="secondary" type="button">
                 <LuEye /> Preview
               </Button>
-              <Button
+              {/* <Button
                 onClick={() => onPrintInvoice()}
                 variant="primary"
                 type="button"
                 className="bg-yellow-400 text-text-primary hover:bg-yellow-500 active:bg-yellow-500/70"
               >
                 <LuPrinter /> Print Invoice
-              </Button>
+              </Button> */}
             </div>
           </div>
         </section>
