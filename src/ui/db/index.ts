@@ -1,55 +1,44 @@
 import type { Invoice } from "../hooks/useInvoice";
+import { invoke } from "@tauri-apps/api/core";
 
 class Storage {
-  private INVOICE_LIST_KEY = "invoices";
-
-  saveInvoice(invoice: Invoice) {
-    const invoiceList: Invoice[] = this.loadInvoiceList();
-    const existingIndex = invoiceList.findIndex((i) => i.id === invoice.id);
-
-    if (existingIndex === -1) {
-      invoiceList.push(invoice);
-    } else {
-      invoiceList[existingIndex] = invoice;
-    }
-
-    localStorage.setItem(this.INVOICE_LIST_KEY, JSON.stringify(invoiceList));
+  async saveInvoice(invoice: Invoice) {
+    await invoke("save_invoice", { id: invoice.id, data: JSON.stringify(invoice) });
   }
 
-  deleteInvoice(id: string) {
-    let invoiceList: Invoice[] = this.loadInvoiceList();
-    const invoiceExist = invoiceList.findIndex((i) => i.id === id);
-    if (invoiceExist < 0) return;
-
-    invoiceList = invoiceList.filter((i) => i.id !== id);
-
-    localStorage.setItem(this.INVOICE_LIST_KEY, JSON.stringify(invoiceList));
+  async deleteInvoice(id: string) {
+    await invoke("delete_invoice", { id });
   }
 
-  loadInvoiceList(): Invoice[] {
-    const invoiceList = JSON.parse(localStorage.getItem(this.INVOICE_LIST_KEY) || "[]") as Invoice[];
-    return invoiceList;
+  async loadInvoiceList() {
+    const rows = await invoke<string[]>("load_invoices");
+    let arr: Invoice[] = rows.map((row) => JSON.parse(row));
+    return arr;
   }
 
-  findInvoice(id: string) {
-    const invoiceList = this.loadInvoiceList();
-    if (!invoiceList.length) return null;
-
-    const findInvoice = invoiceList.find((invoice) => invoice.id === id);
-
-    if (findInvoice) return findInvoice;
-
-    return null;
+  async findInvoice(id: string) {
+    const invoice = await invoke<string>("find_invoice", { id });
+    return JSON.parse(invoice);
   }
 
-  loadLastInvoice() {
-    const invoiceList = this.loadInvoiceList();
-    if (!invoiceList.length) return null;
+  async loadLastInvoice(): Promise<Invoice | null> {
+    const invoice = await invoke<string | null>("get_last_invoice");
 
-    return invoiceList[invoiceList.length - 1];
+    if (!invoice) return null;
+
+    const parsed = JSON.parse(invoice) as Invoice;
+    return parsed;
+  }
+
+  async getNextInvoiceId(): Promise<string> {
+    const currentYear = new Date().getFullYear();
+    const number = await invoke<string>("get_next_invoice_id", { year: currentYear });
+
+    const newId = `ADP-${currentYear}-${String(number).padStart(3, "0")}`;
+    return newId;
   }
 }
 
-const storage = new Storage();
+const db = new Storage();
 
-export default storage;
+export default db;

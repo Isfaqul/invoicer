@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createEmptyInvoiceItem } from "../utils/invoicer";
 import type { ItemType } from "../components/Item";
-import db from "../db/index2";
+import db from "../db";
 
 export type Invoice = {
   id: string;
