@@ -4,14 +4,18 @@ import Divider from "../components/Divider";
 import Item from "../components/Item";
 import { GrAdd } from "react-icons/gr";
 import { getTotals } from "../utils/invoicer";
-import { LuPrinter, LuEye } from "react-icons/lu";
+import { LuEye } from "react-icons/lu";
 import type { Invoice } from "../hooks/useInvoice";
 import { formatDate } from "../utils/helpers";
 import SaveButton from "../components/SaveButton";
 
 type InvoiceWrapperProps = {
   currentInvoice: Invoice;
-  updateInvoiceItems: (id: string, field: string, value: string | number) => void;
+  updateInvoiceItems: (
+    id: string,
+    field: string,
+    value: string | number,
+  ) => void;
   updateCustomerInfo: (field: string, value: string) => void;
   addItemRow: () => void;
   deleteItemRow: (id: string) => void;
@@ -22,7 +26,6 @@ type InvoiceWrapperProps = {
 };
 
 function InvoiceWrapper({
-  onPrintInvoice,
   currentInvoice,
   deleteItemRow,
   addItemRow,
@@ -73,7 +76,11 @@ function InvoiceWrapper({
             </Button>
             <div className="flex gap-2">
               <SaveButton onClick={onSave} />
-              <Button onClick={() => onPrintPreview()} variant="secondary" type="button">
+              <Button
+                onClick={() => onPrintPreview()}
+                variant="secondary"
+                type="button"
+              >
                 <LuEye /> Preview
               </Button>
               {/* <Button
@@ -90,14 +97,23 @@ function InvoiceWrapper({
         {/* Total Section */}
         <section className="bg-bg-sidebar rounded-2xs px-3 py-2 mt-2 w-60 space-y-2 ml-auto">
           <p className="flex justify-between">
-            Sub Total <strong className="font-normal">₹ {getTotals(currentInvoice.items).subTotal}</strong>
+            Sub Total{" "}
+            <strong className="font-normal">
+              ₹ {getTotals(currentInvoice.items).subTotal}
+            </strong>
           </p>
           <p className="flex justify-between">
-            Rounding (+/-) <strong className="font-normal">₹ {getTotals(currentInvoice.items).rounding}</strong>
+            Rounding (+/-){" "}
+            <strong className="font-normal">
+              ₹ {getTotals(currentInvoice.items).rounding}
+            </strong>
           </p>
           <Divider className="my-2" />
           <p className="flex justify-between text-lg font-semibold">
-            Total <strong className="">₹ {getTotals(currentInvoice.items).total}</strong>
+            Total{" "}
+            <strong className="">
+              ₹ {getTotals(currentInvoice.items).total}
+            </strong>
           </p>
         </section>
       </div>

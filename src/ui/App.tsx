@@ -16,16 +16,16 @@ function App() {
     window.print();
   }
 
-  function handleSelectInvoice(id: string) {
-    const invoice = findInvoice(id);
+  async function handleSelectInvoice(id: string) {
+    const invoice = await findInvoice(id);
 
     if (!invoice) return;
 
     setCurrentInvoice(invoice);
   }
 
-  function handleDeleteInvoice(id: string) {
-    deleteInvoice(id);
+  async function handleDeleteInvoice(id: string) {
+    await deleteInvoice(id);
   }
 
   return (
