@@ -1,10 +1,10 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "invoicer",
+  "productName": "Invoicer",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.isfaqul.invoicer",
   "build": {
-    "frontendDist": "../dist",
+    "frontendDist": "../dist-ui",
     "devUrl": "http://localhost:5173",
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build"
@@ -13,8 +13,10 @@
     "windows": [
       {
         "title": "Invoicer",
-        "width": 1280,
-        "height": 720,
+        "minWidth": 1100,
+        "minHeight": 700,
+        "width": 1400,
+        "height": 900,
         "resizable": true,
         "fullscreen": false
       }
