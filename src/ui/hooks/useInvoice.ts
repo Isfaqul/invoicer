@@ -77,6 +77,12 @@ export default function useInvoice() {
     });
   }
 
+  function updateInvoiceField(field: keyof Invoice, value: string | number) {
+    setCurrentInvoice((prev) => {
+      return { ...prev, [field]: value };
+    });
+  }
+
   function updateCustomerInfo(field: string, value: string) {
     setCurrentInvoice((prev) => {
       return { ...prev, customer: { ...prev.customer, [field]: value } };
@@ -150,5 +156,6 @@ export default function useInvoice() {
     deleteInvoice,
     invoiceList,
     setInvoiceList,
+    updateInvoiceField,
   };
 }

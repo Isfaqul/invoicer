@@ -8,8 +8,16 @@ import useView from "./hooks/useView";
 
 function App() {
   const [showPreview, setShowPreview] = useState(false);
-  const { currentInvoice, createNewInvoice, setCurrentInvoice, findInvoice, deleteInvoice, invoiceList, ...rest } =
-    useInvoice();
+  const {
+    currentInvoice,
+    createNewInvoice,
+    setCurrentInvoice,
+    findInvoice,
+    deleteInvoice,
+    invoiceList,
+    updateInvoiceField,
+    ...rest
+  } = useInvoice();
   const { currentView, setCurrentView } = useView();
 
   function printInvoice() {
@@ -42,6 +50,7 @@ function App() {
         />
         {currentView === "Invoice" ? (
           <InvoiceWrapper
+            updateInvoiceField={updateInvoiceField}
             invoiceList={invoiceList}
             onPrintInvoice={printInvoice}
             currentInvoice={currentInvoice}

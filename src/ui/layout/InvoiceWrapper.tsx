@@ -6,13 +6,14 @@ import { GrAdd } from "react-icons/gr";
 import { getTotals } from "../utils/invoicer";
 import { LuEye } from "react-icons/lu";
 import type { Invoice } from "../hooks/useInvoice";
-import { formatDate } from "../utils/helpers";
+import { formatDate, formatDateForInput } from "../utils/helpers";
 import SaveButton from "../components/SaveButton";
 
 type InvoiceWrapperProps = {
   currentInvoice: Invoice;
   updateInvoiceItems: (id: string, field: string, value: string | number) => void;
   updateCustomerInfo: (field: string, value: string) => void;
+  updateInvoiceField: (field: keyof Invoice, value: string | number) => void;
   addItemRow: () => void;
   deleteItemRow: (id: string) => void;
   onPrintInvoice: () => void;
@@ -29,16 +30,26 @@ function InvoiceWrapper({
   updateCustomerInfo,
   onPrintPreview,
   onSave,
+  updateInvoiceField,
   invoiceList,
 }: InvoiceWrapperProps) {
   return (
     <section className="bg-bg-surface grow h-full p-8 flex flex-col gap-2 overflow-y-auto">
       <div className="border border-border-light rounded-xs px-5 pt-3 py-5">
         <header className="flex justify-between w-full mb-2">
-          <p className="font-light">
+          <label htmlFor="date" className="font-light">
             <strong className="font-bold">Date </strong>
-            <time dateTime={formatDate(currentInvoice.date)}>{formatDate(currentInvoice.date)}</time>
-          </p>
+            <input
+              name="date"
+              type="date"
+              value={formatDateForInput(currentInvoice.date)}
+              onChange={(e) => {
+                const value = e.target.value;
+                const timestamp = new Date(value).getTime();
+                updateInvoiceField("date", timestamp);
+              }}
+            />
+          </label>
           <p className="font-light">
             <strong className="font-bold">Invoice # </strong>
             {currentInvoice.id}
