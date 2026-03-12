@@ -21,7 +21,8 @@ pub fn run() {
             load_invoices,
             delete_invoice,
             find_invoice,
-            get_last_invoice
+            get_last_invoice,
+            get_next_invoice_id
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -46,7 +47,16 @@ fn init_db(app: &tauri::AppHandle) {
         "CREATE TABLE IF NOT EXISTS invoices (row_id INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT UNIQUE NOT NULL, data TEXT NOT NULL)",
         [],
     )
-    .expect("failed to create table");
+    .unwrap();
+
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS invoice_counters (
+            year INTEGER PRIMARY KEY,
+            last_number INTEGER NOT NULL
+            )",
+        [],
+    )
+    .unwrap();
 }
 
 #[tauri::command]
@@ -90,8 +100,6 @@ fn find_invoice(app: tauri::AppHandle, id: String) -> Option<String> {
 
     let result = stmt.query_row([id], |row| row.get(0)).ok();
 
-    println!("Found Invoice: {:?}", result);
-
     result
 }
 
@@ -105,7 +113,33 @@ fn get_last_invoice(app: tauri::AppHandle) -> Option<String> {
 
     let result = stmt.query_row([], |row| row.get(0)).ok();
 
-    println!("Found Invoice: {:?}", result);
-
     result
+}
+
+#[tauri::command]
+fn get_next_invoice_id(app: tauri::AppHandle, year: i32) -> i32 {
+    let conn = get_connection(&app);
+
+    conn.execute(
+        "INSERT INTO invoice_counters (year, last_number)
+         VALUES (?1, 0)
+         ON CONFLICT(year) DO NOTHING",
+        [year],
+    )
+    .unwrap();
+
+    conn.execute(
+        "UPDATE invoice_counters
+         SET last_number = last_number + 1
+         WHERE year = ?1",
+        [year],
+    )
+    .unwrap();
+
+    conn.query_row(
+        "SELECT last_number FROM invoice_counters WHERE year = ?1",
+        [year],
+        |row| row.get(0),
+    )
+    .unwrap()
 }

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { createEmptyInvoiceItem, generateNewInvoiceID } from "../utils/invoicer";
+import { createEmptyInvoiceItem } from "../utils/invoicer";
 import type { ItemType } from "../components/Item";
-import storage from "../db/index2";
+import db from "../db/index2";
 
 export type Invoice = {
   id: string;
   customer: Customer;
   status: "draft" | "final";
   items: ItemType[];
-  date: Date;
+  date: number;
 };
 
 export type Customer = {
@@ -21,7 +21,7 @@ export default function useInvoice() {
   const [currentInvoice, setCurrentInvoice] = useState<Invoice>({
     id: "",
     status: "draft",
-    date: new Date(),
+    date: Date.now(),
     customer: {
       clientName: "",
       clientAddress: "",
@@ -50,17 +50,10 @@ export default function useInvoice() {
   }
 
   async function createBlankInvoiceTemplate(): Promise<Invoice> {
-    const lastInvoice = await storage.loadLastInvoice();
-    let lastInvoiceId = "";
-
-    if (lastInvoice) {
-      lastInvoiceId = lastInvoice.id;
-    }
-
     return {
-      id: generateNewInvoiceID(lastInvoiceId),
+      id: "",
       status: "draft",
-      date: new Date(),
+      date: Date.now(),
       customer: {
         clientName: "",
         clientAddress: "",
@@ -107,32 +100,41 @@ export default function useInvoice() {
   }
 
   async function saveInvoice() {
-    setInvoiceList((prev) => {
-      const index = prev.findIndex((i) => i.id === currentInvoice.id);
+    let invoiceToSave = currentInvoice;
 
-      if (index < 0) return [...prev, currentInvoice];
+    // Generate invoice ID only when saving for the first time
+    if (!invoiceToSave.id) {
+      const newId = await db.getNextInvoiceId();
+      invoiceToSave = { ...invoiceToSave, id: newId };
+      setCurrentInvoice(invoiceToSave);
+    }
+
+    setInvoiceList((prev) => {
+      const index = prev.findIndex((i) => i.id === invoiceToSave.id);
+
+      if (index < 0) return [...prev, invoiceToSave];
 
       const copy = [...prev];
-      copy[index] = currentInvoice;
+      copy[index] = invoiceToSave;
 
       return copy;
     });
 
-    await storage.saveInvoice(currentInvoice);
+    await db.saveInvoice(invoiceToSave);
   }
 
   async function findInvoice(id: string) {
-    return await storage.findInvoice(id);
+    return await db.findInvoice(id);
   }
 
   function getAllInvoices() {
-    return storage.loadInvoiceList();
+    return db.loadInvoiceList();
   }
 
   function deleteInvoice(id: string) {
     setInvoiceList((prev) => prev.filter((i) => i.id !== id));
 
-    storage.deleteInvoice(id);
+    db.deleteInvoice(id);
   }
 
   return {

@@ -29,8 +29,16 @@ class Storage {
     const parsed = JSON.parse(invoice) as Invoice;
     return parsed;
   }
+
+  async getNextInvoiceId(): Promise<string> {
+    const currentYear = new Date().getFullYear();
+    const number = await invoke<string>("get_next_invoice_id", { year: currentYear });
+
+    const newId = `ADP-${currentYear}-${String(number).padStart(3, "0")}`;
+    return newId;
+  }
 }
 
-const storage = new Storage();
+const db = new Storage();
 
-export default storage;
+export default db;

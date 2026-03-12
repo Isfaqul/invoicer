@@ -101,9 +101,7 @@ function PrintableInvoice({ currentInvoice, onPreviewClose, onPrint }: PrintProp
             <div className="border border-border-light p-2 rounded-md shrink-0">
               <p className="text-right">
                 <strong className="font-semibold">Date </strong>
-                <time dateTime={formatDate(currentInvoice.date.toString())}>
-                  {formatDate(currentInvoice.date.toString())}
-                </time>
+                <time dateTime={formatDate(currentInvoice.date)}>{formatDate(currentInvoice.date)}</time>
                 {/* <span className="font-semibold">Date</span> {currentInvoice.date.toLocaleDateString()} */}
               </p>
               <p className="text-right">

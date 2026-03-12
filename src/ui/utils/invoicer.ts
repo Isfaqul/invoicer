@@ -70,24 +70,24 @@ export function getRowPrice(rate: number, quantity: number) {
   return Math.round(total * 100) / 100;
 }
 
-export function generateNewInvoiceID(lastInvoiceId: string) {
-  if (!lastInvoiceId) return `ADP-${new Date().getFullYear()}-001`;
+// export function generateNewInvoiceID(lastInvoiceId: string) {
+//   if (!lastInvoiceId) return `ADP-${new Date().getFullYear()}-001`;
 
-  const [_, year, serial] = lastInvoiceId.split("-");
+//   const [_, year, serial] = lastInvoiceId.split("-");
 
-  let nextYear = parseInt(year);
-  let nextSerial = 1;
+//   let nextYear = parseInt(year);
+//   let nextSerial = 1;
 
-  const currentYear = new Date().getFullYear();
-  if (currentYear > parseInt(year)) {
-    nextYear = currentYear;
-    nextSerial = 1;
-  } else {
-    nextSerial = parseInt(serial) + 1;
-  }
+//   const currentYear = new Date().getFullYear();
+//   if (currentYear > parseInt(year)) {
+//     nextYear = currentYear;
+//     nextSerial = 1;
+//   } else {
+//     nextSerial = parseInt(serial) + 1;
+//   }
 
-  return `ADP-${nextYear}-${String(nextSerial).padStart(3, "0")}`;
-}
+//   return `ADP-${nextYear}-${String(nextSerial).padStart(3, "0")}`;
+// }
 
 export function createEmptyInvoiceItem(): ItemType {
   return {
