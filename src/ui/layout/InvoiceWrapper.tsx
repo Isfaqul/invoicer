@@ -6,7 +6,7 @@ import { GrAdd } from "react-icons/gr";
 import { getTotals } from "../utils/invoicer";
 import { LuEye } from "react-icons/lu";
 import type { Invoice } from "../hooks/useInvoice";
-import { formatDate, formatDateForInput } from "../utils/helpers";
+import { formatDateForInput } from "../utils/helpers";
 import SaveButton from "../components/SaveButton";
 
 type InvoiceWrapperProps = {
