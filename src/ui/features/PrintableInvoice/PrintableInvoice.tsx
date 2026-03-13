@@ -23,7 +23,7 @@ function PrintableInvoice({ currentInvoice, onPreviewClose, onPrint }: PrintProp
     <>
       <div
         id="print-area"
-        className="bg-bg-sidebar p-2 print:p-0 fixed inset-y-0 right-0 z-40 flex items-start gap-2 animate-slide-in"
+        className="bg-bg-sidebar print:bg-white p-2 print:p-0 print:h-auto fixed print:relative inset-y-0 right-0 z-40 flex items-start gap-2 animate-slide-in"
       >
         <div className="flex flex-col gap-2 print:hidden">
           <button
@@ -41,7 +41,7 @@ function PrintableInvoice({ currentInvoice, onPreviewClose, onPrint }: PrintProp
             <BiPrinter />
           </button>
         </div>
-        <section className="h-full border bg-white p-4 rounded-2xs border-border-medium w-2xl print:w-[210mm] print:min-h-[297mm] print:border-0 print:p-0">
+        <section className="h-full print:h-auto overflow-y-auto print:overflow-visible border bg-white p-4 rounded-2xs border-border-medium w-2xl print:w-full print:border-0 print:p-0">
           {/* Invoice Header */}
           <div className="flex justify-between">
             <div className="flex gap-4">

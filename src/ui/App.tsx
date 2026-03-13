@@ -37,8 +37,8 @@ function App() {
   }
 
   return (
-    <main className="h-full font-body flex justify-center gap-2 relative overflow-x-hidden">
-      <div className="h-full flex w-full overflow-hidden">
+    <main className="h-full font-body flex justify-center gap-2 relative overflow-x-hidden print:block print:h-auto print:overflow-visible">
+      <div className="h-full flex w-full overflow-hidden print:hidden">
         <SideBar
           onCreateNewInvoice={createNewInvoice}
           invoiceList={invoiceList}

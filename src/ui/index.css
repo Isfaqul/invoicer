@@ -158,19 +158,31 @@
 }
 
 @media print {
-  body * {
-    visibility: hidden;
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background-color: white !important;
   }
 
-  #print-area,
-  #print-area * {
-    visibility: visible;
+  @page {
+    size: A4;
+    margin: 10mm 15mm; /* Top - Bottom 10mm, Left - Right 15mm */
   }
 
-  #print-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+  table {
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group; /* Repeats column headers on every page */
+  }
+
+  tfoot {
+    display: table-row-group; /* Shows total on the last page only */
   }
 }
