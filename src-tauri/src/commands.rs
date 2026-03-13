@@ -58,19 +58,6 @@ pub fn find_invoice(app: tauri::AppHandle, id: String) -> Option<String> {
 }
 
 #[tauri::command]
-pub fn get_last_invoice(app: tauri::AppHandle) -> Option<String> {
-    let conn = get_connection(&app);
-
-    let mut stmt = conn
-        .prepare("SELECT data FROM invoices ORDER BY rowid DESC LIMIT 1")
-        .unwrap();
-
-    let result = stmt.query_row([], |row| row.get(0)).ok();
-
-    result
-}
-
-#[tauri::command]
 pub fn get_next_invoice_id(app: tauri::AppHandle, year: i32) -> i32 {
     let conn = get_connection(&app);
 

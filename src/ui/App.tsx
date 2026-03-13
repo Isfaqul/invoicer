@@ -6,6 +6,7 @@ import SideBar from "./layout/SideBar";
 import Dashboard from "./features/Dashboard/Dashboard";
 import useView from "./hooks/useView";
 import { listen } from "@tauri-apps/api/event";
+import { exit } from "@tauri-apps/plugin-process";
 
 function App() {
   const [showPreview, setShowPreview] = useState(false);
@@ -22,11 +23,49 @@ function App() {
   const { currentView, setCurrentView } = useView();
 
   useEffect(() => {
-    const unlisten = listen("menu-save", async () => await rest.saveInvoice());
+    const listeners = Promise.all([
+      listen("menu-save", async () => {
+        await rest.saveInvoice();
+      }),
+
+      listen("menu-preview", () => {
+        setShowPreview(true);
+      }),
+    ]);
 
     return () => {
-      unlisten.then((fn) => fn());
+      listeners.then((unlisteners) => {
+        unlisteners.forEach((unlisten) => unlisten());
+      });
     };
+  }, [rest.saveInvoice]);
+
+  useEffect(() => {
+    async function handleKeydown(e: KeyboardEvent) {
+      const isModifier = e.ctrlKey || e.metaKey;
+
+      if (!isModifier) return; // Do nothing if ctrl/cmd not pressed
+
+      switch (e.key.toLowerCase()) {
+        case "s":
+          e.preventDefault();
+          await rest.saveInvoice();
+          break;
+
+        case "p":
+          e.preventDefault();
+          setShowPreview(true);
+          break;
+
+        case "q":
+          e.preventDefault();
+          await exit(0);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeydown);
+
+    return () => window.removeEventListener("keydown", handleKeydown);
   }, [rest.saveInvoice]);
 
   function printInvoice() {

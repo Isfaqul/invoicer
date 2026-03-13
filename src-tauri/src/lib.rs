@@ -7,6 +7,7 @@ mod commands;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_process::init())
         .setup(|app| {
             init_db(app.handle());
 
@@ -61,7 +62,6 @@ pub fn run() {
             commands::load_invoices,
             commands::delete_invoice,
             commands::find_invoice,
-            commands::get_last_invoice,
             commands::get_next_invoice_id
         ])
         .run(tauri::generate_context!())
@@ -72,7 +72,11 @@ fn init_db(app: &tauri::AppHandle) {
     let conn = commands::get_connection(app);
 
     conn.execute(
-        "CREATE TABLE IF NOT EXISTS invoices (row_id INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT UNIQUE NOT NULL, data TEXT NOT NULL)",
+        "CREATE TABLE IF NOT EXISTS invoices (
+        row_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        id TEXT UNIQUE NOT NULL, 
+        data TEXT NOT NULL
+        )",
         [],
     )
     .unwrap();
