@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Print from "./features/PrintableInvoice/PrintableInvoice";
 import useInvoice from "./hooks/useInvoice";
 import InvoiceWrapper from "./layout/InvoiceWrapper";
 import SideBar from "./layout/SideBar";
 import Dashboard from "./features/Dashboard/Dashboard";
 import useView from "./hooks/useView";
+import { listen } from "@tauri-apps/api/event";
 
 function App() {
   const [showPreview, setShowPreview] = useState(false);
@@ -19,6 +20,14 @@ function App() {
     ...rest
   } = useInvoice();
   const { currentView, setCurrentView } = useView();
+
+  useEffect(() => {
+    const unlisten = listen("menu-save", async () => await rest.saveInvoice());
+
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, [rest.saveInvoice]);
 
   function printInvoice() {
     window.print();

@@ -51,7 +51,7 @@ pub fn run() {
                 }
                 "quit" => {
                     println!("Quit Event");
-                    let _ = app_handle.emit("menu-quit", ());
+                    app_handle.exit(0);
                 }
                 _ => {}
             },

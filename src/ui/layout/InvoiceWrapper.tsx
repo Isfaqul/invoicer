@@ -7,7 +7,7 @@ import { getTotals } from "../utils/invoicer";
 import { LuEye } from "react-icons/lu";
 import type { Invoice } from "../hooks/useInvoice";
 import { formatDateForInput } from "../utils/helpers";
-import SaveButton from "../components/SaveButton";
+// import SaveButton from "../components/SaveButton";
 
 type InvoiceWrapperProps = {
   currentInvoice: Invoice;
@@ -80,7 +80,7 @@ function InvoiceWrapper({
               <GrAdd /> Add Item
             </Button>
             <div className="flex gap-2">
-              <SaveButton onClick={onSave} />
+              {/* <SaveButton onClick={onSave} /> */}
               <Button onClick={() => onPrintPreview()} variant="secondary" type="button">
                 <LuEye /> Preview
               </Button>
