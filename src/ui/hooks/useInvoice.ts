@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createEmptyInvoiceItem } from "../utils/invoicer";
 import type { ItemType } from "../components/Item";
 import db from "../db";
+import { useToastContext } from "../features/Toast/ToastProvider";
 
 export type Invoice = {
   id: string;
@@ -30,6 +31,7 @@ export default function useInvoice() {
     items: [createEmptyInvoiceItem()],
   });
   const [invoiceList, setInvoiceList] = useState<Invoice[]>([]);
+  const { addToast } = useToastContext();
 
   useEffect(() => {
     async function init() {
@@ -127,6 +129,7 @@ export default function useInvoice() {
     });
 
     await db.saveInvoice(invoiceToSave);
+    addToast(`Saved ${invoiceToSave.id && invoiceToSave.id}`);
   }
 
   async function findInvoice(id: string) {
@@ -141,6 +144,7 @@ export default function useInvoice() {
     setInvoiceList((prev) => prev.filter((i) => i.id !== id));
 
     db.deleteInvoice(id);
+    addToast(`Removed ${id}`);
   }
 
   return {
