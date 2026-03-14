@@ -5,7 +5,6 @@ import InvoiceWrapper from "./layout/InvoiceWrapper";
 import SideBar from "./layout/SideBar";
 import Dashboard from "./features/Dashboard/Dashboard";
 import useView from "./hooks/useView";
-import { listen } from "@tauri-apps/api/event";
 import { exit } from "@tauri-apps/plugin-process";
 
 function App() {
@@ -23,26 +22,15 @@ function App() {
   } = useInvoice();
   const { currentView, setCurrentView } = useView();
   const printInvoiceRef = useRef(null);
+  const saveInvoiceRef = useRef(rest.saveInvoice);
 
   useEffect(() => {
-    const listeners = Promise.all([
-      listen("menu-save", async () => {
-        await rest.saveInvoice();
-      }),
-
-      listen("menu-preview", () => {
-        setShowPreview(true);
-      }),
-    ]);
-
-    return () => {
-      listeners.then((unlisteners) => {
-        unlisteners.forEach((unlisten) => unlisten());
-      });
-    };
+    saveInvoiceRef.current = rest.saveInvoice;
   }, [rest.saveInvoice]);
 
   useEffect(() => {
+    console.log("Registering keyboard listener");
+
     async function handleKeydown(e: KeyboardEvent) {
       const isModifier = e.ctrlKey || e.metaKey;
 
@@ -51,7 +39,7 @@ function App() {
       switch (e.key.toLowerCase()) {
         case "s":
           e.preventDefault();
-          await rest.saveInvoice();
+          await saveInvoiceRef.current();
           break;
 
         case "p":
@@ -62,13 +50,17 @@ function App() {
         case "q":
           e.preventDefault();
           await exit(0);
+          break;
       }
     }
 
     window.addEventListener("keydown", handleKeydown);
 
-    return () => window.removeEventListener("keydown", handleKeydown);
-  }, [rest.saveInvoice]);
+    return () => {
+      console.log("Removing keyboard listener");
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, []);
 
   useEffect(() => {
     if (showPreview) setRenderPreview(true);
@@ -95,7 +87,7 @@ function App() {
       document.removeEventListener("click", handleOutsideClick);
       window.removeEventListener("keydown", handleOutsideKeyDown);
     };
-  });
+  }, [showPreview]);
 
   function printInvoice() {
     window.print();

@@ -107,6 +107,7 @@ export default function useInvoice() {
     });
   }
 
+  // Saves currentlyActive Invoice
   async function saveInvoice() {
     let invoiceToSave = currentInvoice;
 
@@ -116,6 +117,8 @@ export default function useInvoice() {
       invoiceToSave = { ...invoiceToSave, id: newId };
       setCurrentInvoice(invoiceToSave);
     }
+
+    await db.saveInvoice(invoiceToSave);
 
     setInvoiceList((prev) => {
       const index = prev.findIndex((i) => i.id === invoiceToSave.id);
@@ -128,7 +131,6 @@ export default function useInvoice() {
       return copy;
     });
 
-    await db.saveInvoice(invoiceToSave);
     addToast(`Saved ${invoiceToSave.id && invoiceToSave.id}`);
   }
 
@@ -136,14 +138,16 @@ export default function useInvoice() {
     return await db.findInvoice(id);
   }
 
-  function getAllInvoices() {
+  async function getAllInvoices() {
     return db.loadInvoiceList();
   }
 
-  function deleteInvoice(id: string) {
+  async function deleteInvoice(id: string) {
     setInvoiceList((prev) => prev.filter((i) => i.id !== id));
 
-    db.deleteInvoice(id);
+    await createNewInvoice();
+
+    await db.deleteInvoice(id);
     addToast(`Removed ${id}`, "warn");
   }
 

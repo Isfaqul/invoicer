@@ -18,7 +18,7 @@ function useToast() {
 
     setTimeout(() => {
       removeToast(newId);
-    }, 3000);
+    }, 2000);
   }
 
   function removeToast(id: string) {

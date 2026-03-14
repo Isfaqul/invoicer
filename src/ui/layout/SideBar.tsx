@@ -149,9 +149,9 @@ function SideBar({
 
       {/* Invoice List */}
       {!collapsed && currentView === "Invoice" && (
-        <div>
+        <div className="flex-1 min-h-0 flex flex-col">
           <h2 className="font-medium mb-2">{query ? "Search Results" : "All Invoices"} </h2>
-          <ul className="bg-bg-surface rounded-xs p-3 border border-border-light space-y-2 overflow-y-auto">
+          <ul className="bg-bg-surface rounded-xs p-3 border border-border-light space-y-2 overflow-y-auto flex-1">
             {!filteredInvoice.length && (
               <p className="border border-dashed border-border-medium text-center py-1 text-gray-400 rounded-2xs">
                 Empty
