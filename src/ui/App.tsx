@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Print from "./features/PrintableInvoice/PrintableInvoice";
 import useInvoice from "./hooks/useInvoice";
 import InvoiceWrapper from "./layout/InvoiceWrapper";
@@ -10,6 +10,7 @@ import { exit } from "@tauri-apps/plugin-process";
 
 function App() {
   const [showPreview, setShowPreview] = useState(false);
+  const [renderPreview, setRenderPreview] = useState(false);
   const {
     currentInvoice,
     createNewInvoice,
@@ -21,6 +22,7 @@ function App() {
     ...rest
   } = useInvoice();
   const { currentView, setCurrentView } = useView();
+  const printInvoiceRef = useRef(null);
 
   useEffect(() => {
     const listeners = Promise.all([
@@ -68,6 +70,33 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeydown);
   }, [rest.saveInvoice]);
 
+  useEffect(() => {
+    if (showPreview) setRenderPreview(true);
+  }, [showPreview]);
+
+  useEffect(() => {
+    function handleOutsideClick(e: MouseEvent) {
+      const target = e.target as Element;
+      if (target.closest("#print-area") !== printInvoiceRef.current) {
+        setShowPreview(false);
+      }
+    }
+
+    function handleOutsideKeyDown(e: KeyboardEvent) {
+      const escape = e.key === "Escape";
+      if (showPreview && escape) setShowPreview(false);
+    }
+
+    document.addEventListener("click", handleOutsideClick);
+    window.addEventListener("keydown", handleOutsideKeyDown);
+
+    // Clean up before next effect runs
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+      window.removeEventListener("keydown", handleOutsideKeyDown);
+    };
+  });
+
   function printInvoice() {
     window.print();
   }
@@ -80,8 +109,8 @@ function App() {
     setCurrentInvoice(invoice);
   }
 
-  async function handleDeleteInvoice(id: string) {
-    await deleteInvoice(id);
+  function handleDeleteInvoice(id: string) {
+    deleteInvoice(id);
   }
 
   return (
@@ -113,8 +142,17 @@ function App() {
           <Dashboard />
         )}
       </div>
-      {showPreview && (
-        <Print onPreviewClose={() => setShowPreview(false)} onPrint={printInvoice} currentInvoice={currentInvoice} />
+      {renderPreview && (
+        <Print
+          ref={printInvoiceRef}
+          onAnimationEnd={(e) => {
+            if (e.animationName === "slideOut") setRenderPreview(false);
+          }}
+          onPreviewClose={() => setShowPreview(false)}
+          isVisible={showPreview}
+          onPrint={printInvoice}
+          currentInvoice={currentInvoice}
+        />
       )}
     </main>
   );

@@ -144,7 +144,7 @@ export default function useInvoice() {
     setInvoiceList((prev) => prev.filter((i) => i.id !== id));
 
     db.deleteInvoice(id);
-    addToast(`Removed ${id}`);
+    addToast(`Removed ${id}`, "warn");
   }
 
   return {

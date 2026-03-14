@@ -115,8 +115,27 @@
       0.994 68.4%,
       1
     )
-    400ms;
-  --animate-slide-out: slideOut ease-out 150ms;
+    400ms forwards;
+
+  --animate-slide-out: slideOut
+    linear(
+      0,
+      0.012 0.9%,
+      0.05 2%,
+      0.411 9.2%,
+      0.517 11.8%,
+      0.611 14.6%,
+      0.694 17.7%,
+      0.765 21.1%,
+      0.824 24.8%,
+      0.872 28.9%,
+      0.91 33.4%,
+      0.939 38.4%,
+      0.977 50.9%,
+      0.994 68.4%,
+      1
+    )
+    400ms forwards;
 
   --ease-glide: linear(
     0,
@@ -140,19 +159,17 @@
     0% {
       transform: translateX(100%);
     }
-    ,
     100% {
-      tranform: translateY(initial);
+      transform: translateX(0);
     }
   }
 
   @keyframes slideOut {
     0% {
-      transform: translateX(inital);
+      transform: translateX(0); /* Start at its current position */
     }
-    ,
     100% {
-      tranform: translateY(100%);
+      transform: translateX(100%); /* Slide out to the right */
     }
   }
 }

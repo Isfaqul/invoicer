@@ -1,17 +1,20 @@
 import { useState } from "react";
 
-type Toast = {
+export type ToastType = {
   id: string;
   message: string;
+  variant: ToastVariant;
 };
 
-function useToast() {
-  const [toasts, setToasts] = useState<Toast[]>([]);
+type ToastVariant = "info" | "warn" | "error";
 
-  function addToast(message: string) {
+function useToast() {
+  const [toasts, setToasts] = useState<ToastType[]>([]);
+
+  function addToast(message: string, variant: ToastVariant = "info") {
     let newId = crypto.randomUUID();
 
-    setToasts((prev) => [...prev, { id: newId, message }]);
+    setToasts((prev) => [...prev, { id: newId, message, variant }]);
 
     setTimeout(() => {
       removeToast(newId);
