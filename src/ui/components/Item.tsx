@@ -57,7 +57,7 @@ function Item({ item, onDelete, updateInvoiceItems }: ItemProps) {
           )}
         </div>
       </div>
-      <div className="item-metrics flex gap-5 items-center">
+      <div className="item-metrics flex gap-5 items-center flex-wrap">
         <div className="flex items-center gap-2.5 flex-1">
           <label htmlFor={`itemHSN${item.id}`}>HSN</label>
           <Input

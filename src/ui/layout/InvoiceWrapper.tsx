@@ -37,11 +37,12 @@ function InvoiceWrapper({
     <section className="bg-bg-surface grow h-full p-8 flex flex-col gap-2 overflow-y-auto">
       <div className="border border-border-light rounded-xs px-5 pt-3 py-5">
         <header className="flex justify-between w-full mb-2">
-          <label htmlFor="date" className="font-light">
+          <label htmlFor="dateInput" className="font-light">
             <strong className="font-bold">Date </strong>
             <input
               name="date"
               type="date"
+              id="dateInput"
               value={formatDateForInput(currentInvoice.date)}
               onChange={(e) => {
                 const value = e.target.value;
