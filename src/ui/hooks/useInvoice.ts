@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createEmptyInvoiceItem } from "../utils/invoicer";
 import type { ItemType } from "../components/Item";
 import db from "../db";
@@ -32,6 +32,7 @@ export default function useInvoice() {
   });
   const [invoiceList, setInvoiceList] = useState<Invoice[]>([]);
   const { addToast } = useToastContext();
+  const isDirty = useRef(false);
 
   useEffect(() => {
     async function init() {
@@ -44,6 +45,15 @@ export default function useInvoice() {
 
     init();
   }, []);
+
+  useEffect(() => {
+    if (!currentInvoice.id) return;
+    if (!isDirty.current) return;
+
+    const timer = setTimeout(async () => await saveInvoice(), 1000);
+
+    return () => clearTimeout(timer);
+  }, [currentInvoice]);
 
   async function createNewInvoice() {
     const newInvoice = await createBlankInvoiceTemplate();
@@ -77,18 +87,27 @@ export default function useInvoice() {
     setCurrentInvoice((prev) => {
       return { ...prev, items: itemsCopy };
     });
+
+    // Trigger Auto Save
+    isDirty.current = true;
   }
 
   function updateInvoiceField(field: keyof Invoice, value: string | number) {
     setCurrentInvoice((prev) => {
       return { ...prev, [field]: value };
     });
+
+    // Dirty Fields
+    isDirty.current = true;
   }
 
   function updateCustomerInfo(field: string, value: string) {
     setCurrentInvoice((prev) => {
       return { ...prev, customer: { ...prev.customer, [field]: value } };
     });
+
+    // Dirty Fields
+    isDirty.current = true;
   }
 
   function addItemRow() {
@@ -105,6 +124,9 @@ export default function useInvoice() {
     setCurrentInvoice((prev) => {
       return { ...prev, items: itemsCopy };
     });
+
+    // Dirty Fields
+    isDirty.current = true;
   }
 
   // Saves currentlyActive Invoice
@@ -118,7 +140,10 @@ export default function useInvoice() {
       setCurrentInvoice(invoiceToSave);
     }
 
-    await db.saveInvoice(invoiceToSave);
+    if (isDirty.current) {
+      await db.saveInvoice(invoiceToSave);
+      isDirty.current = false;
+    }
 
     setInvoiceList((prev) => {
       const index = prev.findIndex((i) => i.id === invoiceToSave.id);
