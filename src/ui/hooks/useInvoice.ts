@@ -140,10 +140,8 @@ export default function useInvoice() {
       setCurrentInvoice(invoiceToSave);
     }
 
-    if (isDirty.current) {
-      await db.saveInvoice(invoiceToSave);
-      isDirty.current = false;
-    }
+    await db.saveInvoice(invoiceToSave);
+    isDirty.current = false;
 
     setInvoiceList((prev) => {
       const index = prev.findIndex((i) => i.id === invoiceToSave.id);

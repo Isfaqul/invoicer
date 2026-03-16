@@ -101,8 +101,8 @@ function App() {
     setCurrentInvoice(invoice);
   }
 
-  function handleDeleteInvoice(id: string) {
-    deleteInvoice(id);
+  async function handleDeleteInvoice(id: string) {
+    await deleteInvoice(id);
   }
 
   return (

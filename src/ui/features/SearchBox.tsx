@@ -13,7 +13,7 @@ function SearchBox({
   onSearchBarClick: (e: React.MouseEvent) => void;
 }) {
   return (
-    <form action="#" noValidate>
+    <form action="#" noValidate onSubmit={(e) => e.preventDefault()}>
       <label htmlFor="search">
         <div
           onClick={onSearchBarClick}
