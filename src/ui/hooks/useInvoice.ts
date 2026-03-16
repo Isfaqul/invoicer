@@ -10,6 +10,7 @@ export type Invoice = {
   status: "draft" | "final";
   items: ItemType[];
   date: number;
+  note: string;
 };
 
 export type Customer = {
@@ -29,6 +30,7 @@ export default function useInvoice() {
       clientRefId: "",
     },
     items: [createEmptyInvoiceItem()],
+    note: "",
   });
   const [invoiceList, setInvoiceList] = useState<Invoice[]>([]);
   const { addToast } = useToastContext();
@@ -72,6 +74,7 @@ export default function useInvoice() {
         clientRefId: "",
       },
       items: [createEmptyInvoiceItem()],
+      note: "",
     };
   }
 
@@ -97,7 +100,7 @@ export default function useInvoice() {
       return { ...prev, [field]: value };
     });
 
-    // Dirty Fields
+    // Trigger Auto Save
     isDirty.current = true;
   }
 
@@ -158,6 +161,7 @@ export default function useInvoice() {
   }
 
   async function findInvoice(id: string) {
+    console.log(await db.findInvoice(id));
     return await db.findInvoice(id);
   }
 

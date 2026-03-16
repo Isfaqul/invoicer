@@ -6,7 +6,7 @@ type Button = ComponentPropsWithoutRef<"button"> & {
 };
 
 function Button({ children, variant, className, ...props }: Button) {
-  const baseStyle = `text-sm rounded-2xs flex items-center gap-2 cursor-pointer font-body transition-all ease-out 100ms`;
+  const baseStyle = `text-sm rounded-2xs flex items-center gap-2 cursor-pointer font-body`;
   const primaryStyle = `px-3 py-2 bg-btn-primary-base text-btn-primary-text hover:bg-btn-primary-hover active:bg-btn-primary-active`;
   const secondaryStyle = `px-3 py-2 bg-btn-secondary-base text-btn-secondary-text hover:bg-btn-secondary-hover active:bg-btn-secondary-active`;
   const iconStyle = `px-2 py-2 bg-btn-secondary-base text-btn-secondary-text hover:bg-btn-secondary-hover active:bg-btn-secondary-active`;

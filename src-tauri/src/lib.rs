@@ -35,7 +35,8 @@ fn init_db(app: &tauri::AppHandle) {
         "CREATE TABLE IF NOT EXISTS invoices (
         row_id INTEGER PRIMARY KEY AUTOINCREMENT, 
         id TEXT UNIQUE NOT NULL, 
-        data TEXT NOT NULL
+        data TEXT NOT NULL,
+        created TEXT DEFAULT CURRENT_TIMESTAMP
         )",
         [],
     )
