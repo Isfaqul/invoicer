@@ -1,4 +1,5 @@
 import type { ItemType } from "../components/Item";
+import type { Invoice } from "../hooks/useInvoice";
 
 export function RUPEES_IN_WORDS(amount: number) {
   if (amount === 0) return "";
@@ -68,6 +69,18 @@ export function getRowPrice(rate: number, quantity: number) {
   const total = rate * quantity;
 
   return Math.round(total * 100) / 100;
+}
+
+export function getDashboardTotal(invoices: Invoice[]) {
+  const total = invoices.reduce((acc, invoice) => acc + getTotals(invoice.items).total, 0);
+  return total;
+}
+
+export function getDashboardTotalOutstanding(invoices: Invoice[]) {
+  const total = invoices
+    .filter((invoice) => !invoice.isPaid)
+    .reduce((acc, invoice) => acc + getTotals(invoice.items).total, 0);
+  return total;
 }
 
 // export function generateNewInvoiceID(lastInvoiceId: string) {

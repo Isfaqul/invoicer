@@ -10,9 +10,9 @@ class Storage {
     await invoke("delete_invoice", { id });
   }
 
-  async loadInvoiceList() {
+  async loadInvoiceList(): Promise<Invoice[]> {
     const rows = await invoke<string[]>("load_invoices");
-    let arr: Invoice[] = rows.map((row) => JSON.parse(row));
+    const arr: Invoice[] = rows.map((row) => JSON.parse(row));
     return arr;
   }
 

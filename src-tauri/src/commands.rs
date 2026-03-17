@@ -37,18 +37,6 @@ pub fn load_invoices(app: tauri::AppHandle) -> Vec<String> {
 }
 
 #[tauri::command]
-pub fn load_invoices_with_meta(app: tauri::AppHandle) -> Vec<String> {
-    let conn = get_connection(&app);
-
-    let mut stmt = conn.prepare("SELECT * FROM invoices").unwrap();
-
-    stmt.query_map([], |row| row.get(0))
-        .unwrap()
-        .map(|r| r.unwrap())
-        .collect()
-}
-
-#[tauri::command]
 pub fn delete_invoice(app: tauri::AppHandle, id: String) {
     let conn = get_connection(&app);
 

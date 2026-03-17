@@ -1,10 +1,10 @@
-import type { Invoice } from "../hooks/useInvoice";
+import type { InvoiceData } from "../hooks/useInvoice";
 
 class Storage {
   private INVOICE_LIST_KEY = "invoices";
 
-  saveInvoice(invoice: Invoice) {
-    const invoiceList: Invoice[] = this.loadInvoiceList();
+  saveInvoice(invoice: InvoiceData) {
+    const invoiceList: InvoiceData[] = this.loadInvoiceList();
     const existingIndex = invoiceList.findIndex((i) => i.id === invoice.id);
 
     if (existingIndex === -1) {
@@ -17,7 +17,7 @@ class Storage {
   }
 
   deleteInvoice(id: string) {
-    let invoiceList: Invoice[] = this.loadInvoiceList();
+    let invoiceList: InvoiceData[] = this.loadInvoiceList();
     const invoiceExist = invoiceList.findIndex((i) => i.id === id);
     if (invoiceExist < 0) return;
 
@@ -26,8 +26,8 @@ class Storage {
     localStorage.setItem(this.INVOICE_LIST_KEY, JSON.stringify(invoiceList));
   }
 
-  loadInvoiceList(): Invoice[] {
-    const invoiceList = JSON.parse(localStorage.getItem(this.INVOICE_LIST_KEY) || "[]") as Invoice[];
+  loadInvoiceList(): InvoiceData[] {
+    const invoiceList = JSON.parse(localStorage.getItem(this.INVOICE_LIST_KEY) || "[]") as InvoiceData[];
     return invoiceList;
   }
 

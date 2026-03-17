@@ -4,7 +4,7 @@ import Divider from "../components/Divider";
 import Item from "../components/Item";
 import { GrAdd } from "react-icons/gr";
 import { getTotals } from "../utils/invoicer";
-import { LuEye, LuMenu, LuNotebookPen, LuSave } from "react-icons/lu";
+import { LuCheckCheck, LuEye, LuMenu, LuNotebookPen, LuSave } from "react-icons/lu";
 import type { Invoice } from "../hooks/useInvoice";
 import { formatDateForInput, getMetKeyPerOS } from "../utils/helpers";
 import { useEffect, useRef, useState } from "react";
@@ -13,7 +13,7 @@ type InvoiceWrapperProps = {
   currentInvoice: Invoice;
   updateInvoiceItems: (id: string, field: string, value: string | number) => void;
   updateCustomerInfo: (field: string, value: string) => void;
-  updateInvoiceField: (field: keyof Invoice, value: string | number) => void;
+  updateInvoiceField: (field: keyof Invoice, value: string | number | boolean) => void;
   addItemRow: () => void;
   deleteItemRow: (id: string) => void;
   onPrintInvoice: () => void;
@@ -70,6 +70,15 @@ function InvoiceWrapper({
                 }}
               />
             </label>
+            {/* Payment Badge */}
+            {currentInvoice.id && (
+              <p
+                className={`border text-2xs uppercase font-medium px-2 rounded-2xs transition-all duration-400 linear ${currentInvoice.isPaid ? "border-emerald-600 bg-emerald-50" : "border-red-600 bg-red-50"}`}
+              >
+                {currentInvoice.isPaid ? "Paid" : "Due"}
+              </p>
+            )}
+            {/*  */}
             <p className="font-light">
               <strong className="font-bold">Invoice # </strong>
               {currentInvoice.id}
@@ -94,14 +103,29 @@ function InvoiceWrapper({
                   <li>
                     <Button
                       onClick={() => {
-                        setShowNote(true);
+                        setShowNote((prev) => !prev);
                         setShowMenu(false);
                       }}
                       variant="secondary"
                       type="button"
                       className="w-full"
                     >
-                      <LuNotebookPen /> View Note
+                      <LuNotebookPen /> {showNote ? "Hide Note" : "View Note"}
+                    </Button>
+                  </li>
+                  <li>
+                    <Button
+                      onClick={() => {
+                        setShowMenu(false);
+                        updateInvoiceField("isPaid", !currentInvoice.isPaid);
+                      }}
+                      variant="secondary"
+                      type="button"
+                      className="w-full"
+                    >
+                      <div className="flex gap-2 items-center">
+                        <LuCheckCheck /> {currentInvoice.isPaid ? "Mark UnPaid" : "Mark Paid"}
+                      </div>
                     </Button>
                   </li>
                   <li>

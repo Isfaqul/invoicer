@@ -7,10 +7,11 @@ import { useToastContext } from "../features/Toast/ToastProvider";
 export type Invoice = {
   id: string;
   customer: Customer;
-  status: "draft" | "final";
   items: ItemType[];
   date: number;
   note: string;
+  status: "draft" | "final";
+  isPaid: boolean;
 };
 
 export type Customer = {
@@ -22,8 +23,8 @@ export type Customer = {
 export default function useInvoice() {
   const [currentInvoice, setCurrentInvoice] = useState<Invoice>({
     id: "",
-    status: "draft",
     date: Date.now(),
+    status: "draft",
     customer: {
       clientName: "",
       clientAddress: "",
@@ -31,6 +32,7 @@ export default function useInvoice() {
     },
     items: [createEmptyInvoiceItem()],
     note: "",
+    isPaid: false,
   });
   const [invoiceList, setInvoiceList] = useState<Invoice[]>([]);
   const { addToast } = useToastContext();
@@ -58,16 +60,15 @@ export default function useInvoice() {
   }, [currentInvoice]);
 
   async function createNewInvoice() {
-    const newInvoice = await createBlankInvoiceTemplate();
-
+    const newInvoice = createBlankInvoiceTemplate();
     setCurrentInvoice(newInvoice);
   }
 
-  async function createBlankInvoiceTemplate(): Promise<Invoice> {
+  function createBlankInvoiceTemplate(): Invoice {
     return {
       id: "",
-      status: "draft",
       date: Date.now(),
+      status: "draft",
       customer: {
         clientName: "",
         clientAddress: "",
@@ -75,6 +76,7 @@ export default function useInvoice() {
       },
       items: [createEmptyInvoiceItem()],
       note: "",
+      isPaid: false,
     };
   }
 
@@ -95,7 +97,7 @@ export default function useInvoice() {
     isDirty.current = true;
   }
 
-  function updateInvoiceField(field: keyof Invoice, value: string | number) {
+  function updateInvoiceField(field: keyof Invoice, value: string | number | boolean) {
     setCurrentInvoice((prev) => {
       return { ...prev, [field]: value };
     });
@@ -161,11 +163,10 @@ export default function useInvoice() {
   }
 
   async function findInvoice(id: string) {
-    console.log(await db.findInvoice(id));
     return await db.findInvoice(id);
   }
 
-  async function getAllInvoices() {
+  async function getAllInvoices(): Promise<Invoice[]> {
     return db.loadInvoiceList();
   }
 

@@ -39,12 +39,13 @@ function App() {
       switch (e.key.toLowerCase()) {
         case "s":
           e.preventDefault();
-          await saveInvoiceRef.current();
+          currentView === "Invoice" && (await saveInvoiceRef.current());
           break;
 
         case "p":
           e.preventDefault();
-          setShowPreview(true);
+          console.log(`CURRENT MODE : ${currentView}`);
+          currentView === "Invoice" && setShowPreview(true);
           break;
 
         case "q":
@@ -60,7 +61,7 @@ function App() {
       console.log("Removing keyboard listener");
       window.removeEventListener("keydown", handleKeydown);
     };
-  }, []);
+  }, [currentView]);
 
   useEffect(() => {
     if (showPreview) setRenderPreview(true);

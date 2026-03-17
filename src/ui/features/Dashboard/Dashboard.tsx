@@ -2,13 +2,20 @@ import { useState } from "react";
 import { filterInvoices, formatDate } from "../../utils/helpers";
 import SearchBox from "../SearchBox";
 import type { Invoice } from "../../hooks/useInvoice";
-import { getTotals } from "../../utils/invoicer";
+import { getDashboardTotal, getDashboardTotalOutstanding, getTotals } from "../../utils/invoicer";
 
 function Dashboard({ invoiceList }: { invoiceList: Invoice[] }) {
-  const [query, setQuery] = useState("");
-  const [selectQuery, setSelectQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [category, setCategory] = useState("");
 
-  const filtered = filterInvoices(invoiceList, query);
+  const searchFiltered = filterInvoices(invoiceList, searchQuery);
+  const categoryFiltered = searchFiltered.filter((invoice) => {
+    if (category === "") return true;
+
+    if (category === "paid") return invoice.isPaid === true;
+
+    if (category === "unpaid") return invoice.isPaid === false;
+  });
 
   return (
     <section className="bg-bg-surface grow h-full p-8 flex flex-col gap-2 overflow-y-auto text-text-primary">
@@ -29,15 +36,15 @@ function Dashboard({ invoiceList }: { invoiceList: Invoice[] }) {
             <div className="flex gap-2">
               <SearchBox
                 id={"searchDashboard"}
-                query={query}
+                query={searchQuery}
                 collapsed={false}
                 onSearchBarClick={() => {}}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <label htmlFor="dashboardFilter" className="block rounded-2xs">
                 <select
-                  value={selectQuery}
-                  onChange={(e) => setSelectQuery(e.target.value)}
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
                   name="selectQuery"
                   id="dashboardFilter"
                   className={`appearance-none min-w-36 block h-full bg-white rounded-2xs border border-border-light px-1.5 py-0.5 outline-0 -outline-offset-1 outline-gray-700 focus:outline-1  placeholder:text-gray-400/80 placeholder:font-light "w-full`}
@@ -49,15 +56,15 @@ function Dashboard({ invoiceList }: { invoiceList: Invoice[] }) {
               </label>
             </div>
             <ul className="flex flex-col divide-y divide-bg-sidebar">
-              {filtered.map((invoice) => (
+              {categoryFiltered.map((invoice) => (
                 <li key={invoice.id}>
                   <article className="flex justify-between items-center py-3">
                     <div>
                       <h3 className="font-medium">{invoice.customer.clientName ? invoice.customer.clientName : "-"}</h3>
-                      <p className="text-sm font-light flex gap-3">
-                        <span>{invoice.id}</span>
-                        <span>|</span>
-                        <span>{formatDate(invoice.date)}</span>
+                      <p className="text-xs font-light flex gap-2">
+                        <span className="text-blue-400/90">{invoice.id}</span>
+                        <span className="text-text-muted">|</span>
+                        <span className="text-text-muted">{formatDate(invoice.date)}</span>
                       </p>
                     </div>
                     <p className="text-lg font-medium">
@@ -77,14 +84,14 @@ function Dashboard({ invoiceList }: { invoiceList: Invoice[] }) {
                 <h4 className="uppercase text-xs font-medium text-blue-400">Total</h4>
                 <p className="text-lg font-semibold">
                   <span className="text-text-muted">₹ </span>
-                  <strong className="">5,29,000</strong>
+                  <strong className="">{getDashboardTotal(invoiceList)}</strong>
                 </p>
               </article>
               <article className="flex-1 p-4 border border-red-400 bg-red-50 text-right">
                 <h4 className="uppercase text-xs font-medium text-red-400">Total Overdue</h4>
                 <p className="text-lg font-semibold">
                   <span className="text-text-muted">₹ </span>
-                  <strong className="">5,29,000</strong>
+                  <strong className="">{getDashboardTotalOutstanding(invoiceList)}</strong>
                 </p>
               </article>
             </div>
