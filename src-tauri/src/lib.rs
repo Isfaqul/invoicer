@@ -22,7 +22,8 @@ pub fn run() {
             commands::load_invoices,
             commands::delete_invoice,
             commands::find_invoice,
-            commands::get_next_invoice_id
+            commands::get_next_invoice_id,
+            commands::load_invoices_with_meta,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -36,6 +37,7 @@ fn init_db(app: &tauri::AppHandle) {
         row_id INTEGER PRIMARY KEY AUTOINCREMENT, 
         id TEXT UNIQUE NOT NULL, 
         data TEXT NOT NULL,
+        isPaid INTEGER NOT NULL DEFAULT 0 CHECK (isPaid IN (0, 1)),
         created TEXT DEFAULT CURRENT_TIMESTAMP
         )",
         [],

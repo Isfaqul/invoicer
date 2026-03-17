@@ -131,7 +131,7 @@ function App() {
             onSave={rest.saveInvoice}
           />
         ) : (
-          <Dashboard />
+          <Dashboard invoiceList={invoiceList} />
         )}
       </div>
       {renderPreview && (

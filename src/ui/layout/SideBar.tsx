@@ -14,6 +14,7 @@ import { useState, type ReactNode } from "react";
 import { BiTrash } from "react-icons/bi";
 import logo from "../assets/logo.svg";
 import type { Views } from "../hooks/useView";
+import { filterInvoices } from "../utils/helpers";
 
 type SideBarProps = {
   onCreateNewInvoice: () => void;
@@ -37,23 +38,6 @@ function SideBar({
   const [query, setQuery] = useState("");
   const [collapsed, setCollapsed] = useState(true);
 
-  function filterInvoices(queryStr: string): Invoice[] {
-    queryStr = queryStr.toLowerCase();
-    if (!queryStr) return invoiceList;
-
-    return invoiceList.filter((invoice) => {
-      const idMatch = invoice.id.toLowerCase().includes(queryStr);
-
-      const customerNameMatch = invoice.customer.clientName.toLowerCase().includes(queryStr);
-
-      const addressMatch = invoice.customer.clientAddress.toLowerCase().includes(queryStr);
-
-      const itemMatch = invoice.items.some((i) => i.name.toLowerCase().includes(queryStr));
-
-      return idMatch || customerNameMatch || addressMatch || itemMatch;
-    });
-  }
-
   function handleView(e: React.MouseEvent) {
     const target = e.target as HTMLElement;
     const view = target.getAttribute("data-view-btn") as Views;
@@ -63,7 +47,7 @@ function SideBar({
     setView(view);
   }
 
-  let filteredInvoice = filterInvoices(query);
+  let filteredInvoice = filterInvoices(invoiceList, query);
 
   return (
     <aside
@@ -92,12 +76,16 @@ function SideBar({
       {/*  */}
       <Divider className="border-border-medium" />
       <div className="flex flex-col gap-3">
-        <SearchBox
-          onSearchBarClick={() => collapsed && setCollapsed(false)}
-          onChange={(e) => setQuery(e.target.value)}
-          query={query}
-          collapsed={collapsed}
-        />
+        {currentView === "Invoice" && (
+          <SearchBox
+            id="searchSidebar"
+            onSearchBarClick={() => collapsed && setCollapsed(false)}
+            onChange={(e) => setQuery(e.target.value)}
+            query={query}
+            collapsed={collapsed}
+          />
+        )}
+
         {currentView === "Invoice" && (
           <Button
             onClick={onCreateNewInvoice}

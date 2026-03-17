@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import type { Invoice } from "../hooks/useInvoice";
 
 export function formatDate(date: number) {
   return format(new Date(date), "d-MMM-yyy");
@@ -20,4 +21,21 @@ export function getMetKeyPerOS() {
 
   if (platform === "MacOS") return "⌘";
   else if (platform === "Windows") return "Ctrl";
+}
+
+export function filterInvoices(invoiceList: Invoice[], queryStr: string): Invoice[] {
+  queryStr = queryStr.toLowerCase();
+  if (!queryStr) return invoiceList;
+
+  return invoiceList.filter((invoice) => {
+    const idMatch = invoice.id.toLowerCase().includes(queryStr);
+
+    const customerNameMatch = invoice.customer.clientName.toLowerCase().includes(queryStr);
+
+    const addressMatch = invoice.customer.clientAddress.toLowerCase().includes(queryStr);
+
+    const itemMatch = invoice.items.some((i) => i.name.toLowerCase().includes(queryStr));
+
+    return idMatch || customerNameMatch || addressMatch || itemMatch;
+  });
 }
