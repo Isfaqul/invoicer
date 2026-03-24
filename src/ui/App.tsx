@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Print from "./features/PrintableInvoice/PrintableInvoice";
+import Print from "./features/PrintableInvoice/PrintInvoice";
 import useInvoice from "./hooks/useInvoice";
 import InvoiceWrapper from "./layout/InvoiceWrapper";
 import SideBar from "./layout/SideBar";

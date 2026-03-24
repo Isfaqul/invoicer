@@ -117,7 +117,7 @@ function InvoiceWrapper({
                     <Button
                       onClick={() => {
                         setShowMenu(false);
-                        updateInvoiceField("isPaid", !currentInvoice.isPaid);
+                        currentInvoice.id && updateInvoiceField("isPaid", !currentInvoice.isPaid);
                       }}
                       variant="secondary"
                       type="button"
