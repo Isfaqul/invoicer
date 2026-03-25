@@ -13,6 +13,7 @@ import IconButton from "./components/IconButton";
 
 import qrCode from "../../assets/qr-code.png";
 import logo from "../../assets/logo.svg";
+import { getTotals, RUPEES_IN_WORDS } from "../../utils/invoicer";
 
 const BANK_DETAILS = {
   name: "Adarsha Printers",
@@ -31,6 +32,9 @@ type PrintProps = React.ComponentPropsWithRef<"div"> & {
 };
 
 function PrintableInvoice({ currentInvoice, onPreviewClose, onPrint, isVisible, ...props }: PrintProps) {
+  const invoiceSummary = getTotals(currentInvoice.items);
+  const amountInWords = RUPEES_IN_WORDS(invoiceSummary.total);
+
   return (
     <div
       {...props}
@@ -52,7 +56,7 @@ function PrintableInvoice({ currentInvoice, onPreviewClose, onPrint, isVisible, 
           <BillingParty customer={currentInvoice.customer} />
           <InvoiceMeta date={currentInvoice.date} invoiceId={currentInvoice.id} />
         </div>
-        <InvoiceItemTable items={currentInvoice.items} />
+        <InvoiceItemTable items={currentInvoice.items} invoiceSummary={invoiceSummary} amountInWords={amountInWords} />
         <BankDetails bank={BANK_DETAILS} />
         <Declaration />
         <Signature />

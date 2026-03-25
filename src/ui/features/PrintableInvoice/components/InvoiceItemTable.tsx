@@ -1,10 +1,19 @@
 import type { ItemType } from "../../../components/Item";
-import { getRowPrice, getTotals, RUPEES_IN_WORDS } from "../../../utils/invoicer";
+import { getRowPrice } from "../../../utils/invoicer";
 
-function InvoiceItemTable({ items }: { items: ItemType[] }) {
-  const { subTotal, rounding, total } = getTotals(items);
-  const amountInWords = RUPEES_IN_WORDS(total);
+type InvoiceItemTableProps = {
+  items: ItemType[];
+  invoiceSummary: InvoiceSummary;
+  amountInWords: string;
+};
 
+type InvoiceSummary = {
+  subTotal: number;
+  rounding: number;
+  total: number;
+};
+
+function InvoiceItemTable({ items, invoiceSummary, amountInWords }: InvoiceItemTableProps) {
   return (
     <table className="table-auto border-collapse mt-3 text-xs w-full">
       <thead>
@@ -39,14 +48,14 @@ function InvoiceItemTable({ items }: { items: ItemType[] }) {
         <tr className="print:text-sm">
           <td colSpan={4}></td>
           <td className="px-1 py-1 border text-right border-border-light text-nowrap">Sub Total</td>
-          <td className="px-1 py-1 border text-right border-border-light text-nowrap">₹ {subTotal}</td>
+          <td className="px-1 py-1 border text-right border-border-light text-nowrap">₹ {invoiceSummary.subTotal}</td>
         </tr>
         <tr className="print:text-sm">
           <td colSpan={4} className="px-1 py-1 text-left font-semibold uppercase text-nowrap">
             Amount in words :
           </td>
           <td className="px-1 py-1 border text-right border-border-light text-nowrap">Rounding (+/-)</td>
-          <td className="px-1 py-1 border text-right border-border-light text-nowrap">₹ {rounding}</td>
+          <td className="px-1 py-1 border text-right border-border-light text-nowrap">₹ {invoiceSummary.rounding}</td>
         </tr>
         <tr>
           <td colSpan={4} className="px-1 py-1 text-left print:text-sm text-nowrap">
@@ -56,7 +65,7 @@ function InvoiceItemTable({ items }: { items: ItemType[] }) {
             Total
           </td>
           <td className="px-1 py-1 border text-right border-border-light font-semibold print:text-base text-nowrap">
-            ₹ {total}
+            ₹ {invoiceSummary.total}
           </td>
         </tr>
       </tfoot>
