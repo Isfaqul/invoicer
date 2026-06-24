@@ -1,6 +1,6 @@
 # Invoicer
 
-[DEMO_VIDEO_LINK_HERE](https://youtu.be/LQBFYvy2tYU)
+[WATCH_DEMO_VIDEO_HERE](https://youtu.be/LQBFYvy2tYU)
 
 ![Description|300](public/images/PrePrint.png)
 ![Description|300](public/images/Print.png)
