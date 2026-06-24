@@ -28,7 +28,9 @@ pub fn save_invoice(app: tauri::AppHandle, id: String, data: String) {
 pub fn load_invoices(app: tauri::AppHandle) -> Vec<String> {
     let conn = get_connection(&app);
 
-    let mut stmt = conn.prepare("SELECT data FROM invoices").unwrap();
+    let mut stmt = conn
+        .prepare("SELECT data FROM invoices ORDER BY row_id ASC")
+        .unwrap();
 
     stmt.query_map([], |row| row.get(0))
         .unwrap()
