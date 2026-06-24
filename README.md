@@ -1,7 +1,7 @@
 # Invoicer
 
-<img src="public/images/PrePrint.png" alt="Description" width="500" height="auto">
-<img src="public/images/Print.png" alt="Description" width="500" height="auto">
+![Description|300](public/images/PrePrint.png)
+![Description|300](public/images/Print.png)
 
 A lightweight desktop invoicing application built with **React, TypeScript, Rust, and Tauri**.  
 The goal of this project was to design and build a **real-world, offline-first desktop application** that solves an actual business workflow: generating printable invoices quickly and reliably.
